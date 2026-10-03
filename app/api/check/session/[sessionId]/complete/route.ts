@@ -53,11 +53,9 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json(
         {
           success: false,
-          message: data?.message ?? 'Failed to complete session',
-          backendStatus: backendRes.status,
-          backendUrl,
-          sentBody: body,
-          backendError: data,
+          message: backendRes.status === 409
+            ? 'Checkup completion is already in progress. Please try again shortly.'
+            : 'Failed to complete session',
         },
         { status: backendRes.status },
       );
@@ -66,13 +64,12 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     return NextResponse.json({
       success: true,
       result: data?.data ?? data?.result ?? data,
-      raw: data,
     });
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : 'Internal server error',
+        message: 'Failed to complete session',
       },
       { status: 500 },
     );

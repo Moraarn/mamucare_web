@@ -356,6 +356,7 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
 
   return (
     <AppShell
+      aiGuidance
       viewport
     >
       <div className="chat-panel">

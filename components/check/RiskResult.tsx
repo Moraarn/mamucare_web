@@ -13,7 +13,7 @@ export default function RiskResultComponent({ result }: RiskResultProps) {
           bgVar: 'var(--color-green-light)',
           textVar: 'var(--color-green-dark)',
           icon: CheckCircle,
-          title: 'You are safe for now',
+          title: 'No warning signs detected',
           subtitle: 'No danger signs detected. Check again in 3 days.'
         }
       case 'medium':
@@ -30,14 +30,14 @@ export default function RiskResultComponent({ result }: RiskResultProps) {
           textVar: 'var(--color-red-dark)',
           icon: AlertTriangle,
           title: 'Urgent — seek care now',
-          subtitle: 'Possible complication detected. Go to your nearest clinic immediately. Your health worker has been notified.'
+          subtitle: 'Possible complication detected. Go to your nearest clinic immediately.'
         }
       default:
         return {
           bgVar: 'var(--color-green-light)',
           textVar: 'var(--color-green-dark)',
           icon: CheckCircle,
-          title: 'You are safe for now',
+          title: 'No warning signs detected',
           subtitle: 'No danger signs detected. Check again in 3 days.'
         }
     }
@@ -47,28 +47,28 @@ export default function RiskResultComponent({ result }: RiskResultProps) {
   const Icon = config.icon
 
   return (
-    <div className="space-y-4">
+    <div className="summary-risk">
       {/* Result Hero Card */}
       <div 
-        className="w-full p-4 rounded-2xl"
+        className={`summary-risk-card ${result.riskLevel === 'high' ? 'is-urgent' : ''}`}
         style={{ backgroundColor: config.bgVar }}
       >
         <div className="flex items-start gap-3">
           <div 
-            className="p-2 rounded-full"
+            className="summary-risk-icon"
             style={{ color: config.textVar }}
           >
             <Icon size={24} />
           </div>
           <div className="flex-1">
             <h3 
-              className="font-bold text-lg mb-2"
+              className="summary-risk-title"
               style={{ color: config.textVar }}
             >
               {config.title}
             </h3>
             <p 
-              className="text-sm leading-relaxed opacity-90"
+              className="summary-risk-description"
               style={{ color: config.textVar }}
             >
               {config.subtitle}
@@ -81,7 +81,7 @@ export default function RiskResultComponent({ result }: RiskResultProps) {
       {result.symptomsDetected && result.symptomsDetected.length > 0 && result.riskLevel !== 'low' && (
         <div>
           <h4 
-            className="text-sm font-medium mb-2"
+            className="text-sm font-semibold mb-3"
             style={{ color: 'var(--color-text-primary)' }}
           >
             Symptoms detected:
@@ -90,9 +90,9 @@ export default function RiskResultComponent({ result }: RiskResultProps) {
             {result.symptomsDetected.map((symptom, index) => (
               <span
                 key={index}
-                className="px-3 py-1 rounded-full text-xs font-medium"
+                className="summary-symptom-chip"
                 style={{
-                  backgroundColor: 'var(--color-red-light)',
+                  backgroundColor: 'var(--color-surface-soft)',
                   color: 'var(--color-red-dark)'
                 }}
               >

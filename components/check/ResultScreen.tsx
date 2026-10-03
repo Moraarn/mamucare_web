@@ -1,4 +1,5 @@
-import { Mic, CheckCircle2, AlertCircle, MapPin } from 'lucide-react'
+import { summarizeAlerts, type SmsAlertStatus } from '@/lib/alertStatus'
+import { Mic, CheckCircle2, AlertCircle, MapPin, Loader2, MinusCircle } from 'lucide-react'
 import RiskResultComponent from './RiskResult'
 import HospitalList from './HospitalListDebug'
 import Button from '@/components/ui/Button'
@@ -13,10 +14,7 @@ type CheckResult = {
   date: string
   questions: any[]
   riskResults?: any[]
-  smsAlertStatus?: {
-    chwSent?: boolean
-    emergencySent?: boolean
-  }
+  smsAlertStatus?: SmsAlertStatus
 }
 
 interface ResultScreenProps {
@@ -34,11 +32,12 @@ export default function ResultScreen({
   onCallCHW,
   onCallEmergency
 }: ResultScreenProps) {
+  const alerts = summarizeAlerts(riskResult?.smsAlertStatus, user?.chwPhone, user?.emergencyContactPhone)
   return (
-    <div className="space-y-6">
+    <div className="check-summary">
       {riskResult && (
-        <div className="grid items-start gap-6 lg:grid-cols-2">
-          <section className="min-w-0 space-y-6" aria-label="Checkup result">
+        <div className="summary-columns">
+          <section className="summary-health" aria-label="Checkup result">
           <RiskResultComponent result={{
             riskLevel: riskResult.riskLevel as 'low' | 'medium' | 'high',
             conditionChecked: 'Maternal health symptoms',
@@ -46,61 +45,46 @@ export default function ResultScreen({
           }} />
 
           {/* SMS Alert Status for High Risk */}
-          {riskResult.riskLevel === 'high' && riskResult.smsAlertStatus && (
-            <div
-              className="p-4 rounded-xl"
-              style={{
-                backgroundColor: 'var(--color-blue-light)',
-                border: '1px solid var(--color-blue-dark)'
-              }}
-            >
-              <div className="flex items-start gap-3">
-                <div style={{ color: 'var(--color-blue-dark)' }}>
-                  <CheckCircle2 size={20} />
-                </div>
-                <div className="flex-1">
-                  <h4
-                    className="font-semibold text-sm mb-2"
-                    style={{ color: 'var(--color-blue-dark)' }}
-                  >
-                    Alerts sent to your care team
-                  </h4>
-                  <div className="space-y-1 text-xs" style={{ color: 'var(--color-blue-dark)', opacity: 0.8 }}>
-                    <div className="flex items-center gap-2">
-                      {riskResult.smsAlertStatus.chwSent ? (
-                        <CheckCircle2 size={12} className="text-green-600" />
-                      ) : (
-                        <AlertCircle size={12} className="text-amber-600" />
-                      )}
-                      <span>Health Worker (CHW): {riskResult.smsAlertStatus.chwSent ? 'Sent' : 'Not sent'}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {riskResult.smsAlertStatus.emergencySent ? (
-                        <CheckCircle2 size={12} className="text-green-600" />
-                      ) : (
-                        <AlertCircle size={12} className="text-amber-600" />
-                      )}
-                      <span>Emergency Contact: {riskResult.smsAlertStatus.emergencySent ? 'Sent' : 'Not sent'}</span>
-                    </div>
+          {riskResult.riskLevel === 'high' && (
+            <div className="summary-alert-panel" role="status" aria-live="polite">
+              <div className="summary-alert-heading" style={{ color: alerts.sending ? 'var(--color-text-secondary)' : alerts.sentCount === 2 ? 'var(--color-success)' : 'var(--color-warning)' }}>
+                {alerts.sending ? <Loader2 size={20} className="animate-spin" aria-hidden="true" />
+                  : alerts.sentCount === 2 ? <CheckCircle2 size={20} aria-hidden="true" /> : <AlertCircle size={20} aria-hidden="true" />}
+                <h4>{alerts.title}</h4>
+              </div>
+              <div className="summary-alert-rows">
+                {([
+                  ['Health Worker (CHW)', alerts.chw, alerts.chwLabel],
+                  ['Emergency Contact', alerts.emergency, alerts.emergencyLabel],
+                ] as const).map(([name, status, label]) => (
+                  <div key={name} className="summary-alert-row">
+                    <span>{name}</span>
+                    <span className="summary-alert-state" style={{ color: status === 'sent' ? 'var(--color-success)' : status === 'failed' ? 'var(--color-danger)' : 'var(--color-text-secondary)' }}>
+                      {status === 'sending' ? <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                        : status === 'sent' ? <CheckCircle2 size={14} aria-hidden="true" />
+                        : status === 'failed' ? <AlertCircle size={14} aria-hidden="true" /> : <MinusCircle size={14} aria-hidden="true" />}
+                      {label}
+                    </span>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           )}
 
           </section>
-          <section className="min-w-0 space-y-6" aria-label="Care and location">
+          <section className="summary-care" aria-label="Care and location">
+          <h2 className="summary-section-heading">Nearby care</h2>
           {/* User Location */}
           {user?.location && (
             <div
-              className="p-4 rounded-xl"
+              className="summary-location"
               style={{ backgroundColor: 'var(--color-surface)' }}
             >
               <div className="flex items-center gap-3">
                 <div style={{ color: 'var(--color-primary)' }}>
                   <MapPin size={20} />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h4
                     className="font-semibold text-sm mb-1"
                     style={{ color: 'var(--color-text-primary)' }}
@@ -108,7 +92,7 @@ export default function ResultScreen({
                     Your location
                   </h4>
                   <p
-                    className="text-sm"
+                    className="text-sm leading-relaxed break-words"
                     style={{ color: 'var(--color-text-secondary)' }}
                   >
                     {user.location}
@@ -124,7 +108,7 @@ export default function ResultScreen({
               <HospitalList userLocation={user?.location} />
               
               <div>
-                <h3 className="text-xs uppercase text-text-secondary font-medium mb-3">
+                <h3 className="text-xs uppercase tracking-wide text-text-secondary font-semibold mb-3">
                   Call your care team
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-3">

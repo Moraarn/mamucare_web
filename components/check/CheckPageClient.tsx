@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { MessageCircle, Palette, Languages } from 'lucide-react'
-import { useTheme } from '@/contexts/ThemeContext'
+import { MessageCircle } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 import AppShell from '@/components/ui/AppShell'
 import QuestionProgress from './QuestionProgress'
 import QuestionCard from './QuestionCard'
@@ -33,6 +33,7 @@ type CheckResult = {
   date: string
   questions: Question[]
   riskResults?: any[]
+  smsAlertStatus?: import('@/lib/alertStatus').SmsAlertStatus
 }
 
 async function createCheckSession(userId: string) {
@@ -264,19 +265,22 @@ async function loadQuestions(userStatus: string, trimester?: string): Promise<Qu
 
 export default function CheckPageClient() {
   const router = useRouter()
-  const { toggleTheme } = useTheme()
+  const { language: appLanguage } = useLanguage()
 
   const [user, setUser] = useState<User | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const [language, setLanguage] = useState<'en' | 'sw'>('en')
+  const language = appLanguage === 'sw' ? 'sw' : 'en'
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<boolean[]>([])
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [riskResult, setRiskResult] = useState<CheckResult | null>(null)
+  const [isCompleting, setIsCompleting] = useState(false)
+  const [alertsPending, setAlertsPending] = useState(false)
+  const completionBusy = useRef(false)
   const voice = useVoiceAnswer(language, currentQuestionIndex, setSelectedAnswer)
 
   useEffect(() => {
@@ -405,6 +409,10 @@ export default function CheckPageClient() {
       return
     }
 
+    if (completionBusy.current) return
+    completionBusy.current = true
+    setIsCompleting(true)
+    setAlertsPending(calculateLocalRisk(questions, newAnswers).riskLevel === 'high')
     try {
       const result = await completeCheckSession(
         sessionId,
@@ -415,6 +423,10 @@ export default function CheckPageClient() {
       setShowResult(true)
     } catch (error) {
       console.error('[check] Failed to complete backend session:', error)
+    } finally {
+      completionBusy.current = false
+      setIsCompleting(false)
+      setAlertsPending(false)
     }
   }
 
@@ -438,32 +450,12 @@ export default function CheckPageClient() {
     <AppShell
       contentWidth={showResult ? 'wide' : 'reading'}
     >
-      <div className={`mx-auto flex h-full w-full flex-col ${showResult ? '' : 'max-w-[640px] pb-8 sm:pt-2'}`}>
-        <div className="mb-6 flex items-center justify-end gap-3">
-          {showResult && <p className="mr-auto text-sm font-medium text-text-secondary">Your checkup summary</p>}
-          <div className="flex shrink-0 gap-2">
-          <button
-            onClick={() => { voice.reset(); setLanguage(language === 'en' ? 'sw' : 'en') }}
-            className="check-tool"
-            style={{ backgroundColor: 'var(--color-surface)' }}
-            title="Switch language"
-            aria-label="Switch question language"
-          >
-            <Languages size={20} style={{ color: 'var(--color-text-primary)' }} />
-          </button>
-          <button
-            onClick={toggleTheme}
-            className="check-tool"
-            style={{ backgroundColor: 'var(--color-surface)' }}
-            title="Toggle theme"
-            aria-label="Toggle color theme"
-          >
-            <Palette size={20} style={{ color: 'var(--color-text-primary)' }} />
-          </button>
-        </div>
+      <div className={`mx-auto flex h-full w-full flex-col ${showResult ? 'max-w-[1160px]' : 'max-w-[640px] pb-8 sm:pt-2'}`}>
+        {showResult && <p className="mb-4 text-xs uppercase tracking-wider font-semibold text-text-secondary">Your checkup summary</p>}
 
-        </div>
-
+        {isCompleting && <p role="status" aria-live="polite" className="mb-4 text-center text-sm text-text-secondary">
+          {alertsPending ? 'Sending alerts...' : 'Completing checkup...'}
+        </p>}
         <QuestionProgress
           currentQuestionIndex={currentQuestionIndex}
           totalQuestions={questions.length}
@@ -488,7 +480,7 @@ export default function CheckPageClient() {
 
               <Button
                 onClick={handleNext}
-                disabled={selectedAnswer === null}
+                disabled={selectedAnswer === null || isCompleting}
                 fullWidth
               >
                 {currentQuestionIndex < questions.length - 1

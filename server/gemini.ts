@@ -1,5 +1,6 @@
 import 'server-only'
 import { GoogleGenAI } from '@google/genai'
+import { withGeminiRetry } from './geminiRetry'
 
 interface ConversationContext {
   state: string
@@ -20,7 +21,7 @@ export async function generateAIResponse(context: ConversationContext): Promise<
   if (!apiKey) throw new Error('AI service is not configured')
   try {
     const ai = new GoogleGenAI({ apiKey })
-    const response = await ai.models.generateContent({
+    const response = await withGeminiRetry(() => ai.models.generateContent({
       model: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
       contents: getUserPrompt(context),
       config: {
@@ -30,12 +31,14 @@ export async function generateAIResponse(context: ConversationContext): Promise<
         temperature: 0.7,
         // Use the model's default: supported thinking settings vary by model.
       },
-    })
+    }))
     const message = response.text?.trim()
     if (!message) throw new Error('Empty AI response')
     return { message, language: context.language }
   } catch (error) {
-    console.error('Gemini provider error:', error)
+    console.error('Gemini request failed:', {
+      status: typeof error === 'object' && error !== null && 'status' in error ? error.status : 'unknown',
+    })
     // Never return provider diagnostics or credentials to the browser.
     throw new Error('Unable to get an AI response. Please try again.')
   }

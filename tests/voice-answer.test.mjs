@@ -117,16 +117,17 @@ test('questionnaire voice selection can be manually overridden and only Next adv
   const values = [
     { id: 'test-user', status: 'postpartum' },
     [{ id: 'q1', text: 'Question one' }, { id: 'q2', text: 'Question two' }],
-    null, false, 'en', 0, [], null, false, null,
+    null, false, 0, [], null, false, null,
   ]
   let cursor = 0, voiceAnswer, resets = 0
   const mocks = {
-    react: { ...React, useEffect: () => {}, useState: () => {
+    react: { ...React, useRef: () => ({ current: false }), useEffect: () => {}, useState: initial => {
       const index = cursor++
+      if (!(index in values)) values[index] = initial
       return [values[index], value => { values[index] = typeof value === 'function' ? value(values[index]) : value }]
     } },
     'next/navigation': { useRouter: () => ({ replace() {} }) },
-    '@/contexts/ThemeContext': { useTheme: () => ({ toggleTheme() {} }) },
+    '@/contexts/LanguageContext': { useLanguage: () => ({ language: 'en' }) },
     '@/lib/auth': { fetchCurrentUser() {} },
     '@/hooks/useVoiceAnswer': { useVoiceAnswer: (_language, _index, onAnswer) => {
       voiceAnswer = onAnswer
@@ -149,21 +150,21 @@ test('questionnaire voice selection can be manually overridden and only Next adv
   let tree = render()
   assert.equal(find(tree, 'Button').props.disabled, true)
   await find(tree, 'Button').props.onClick()
-  assert.equal(values[5], 0)
+  assert.equal(values[4], 0)
   startVoiceRecognition(FakeRecognition, 'en', () => {}, voiceAnswer)
   FakeRecognition.latest.result('yes')
   tree = render()
   assert.equal(find(tree, 'AnswerButtons').props.selectedAnswer, true)
   assert.equal(find(tree, 'Button').props.disabled, false)
-  assert.equal(values[5], 0)
-  assert.deepEqual(values[6], [])
+  assert.equal(values[4], 0)
+  assert.deepEqual(values[5], [])
   find(tree, 'AnswerButtons').props.onAnswerSelect(false)
   tree = render()
   assert.equal(find(tree, 'AnswerButtons').props.selectedAnswer, false)
   assert.equal(resets, 1)
-  assert.equal(values[5], 0)
+  assert.equal(values[4], 0)
   await find(tree, 'Button').props.onClick()
-  assert.equal(values[5], 1)
-  assert.deepEqual(values[6], [false])
-  assert.equal(values[7], null)
+  assert.equal(values[4], 1)
+  assert.deepEqual(values[5], [false])
+  assert.equal(values[6], null)
 })

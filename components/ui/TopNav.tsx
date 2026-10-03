@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Activity, MessageCircle, User, Heart, Menu, X, Users} from 'lucide-react'
+import { Home, Activity, MessageCircle, User, Heart, Menu, X, Users, Globe, Palette} from 'lucide-react'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const tabs = [
-  { path: '/home', en: 'Home', sw: 'Nyumbani', fr: 'Accueil', icon: Home },
   { path: '/check', en: 'Checkup', sw: 'Angalia', fr: 'Bilan', icon: Activity },
   { path: '/talk', en: 'Talk', sw: 'Zungumza', fr: 'Discuter', icon: MessageCircle },
   { path: '/profile', en: 'Profile', sw: 'Wasifu', fr: 'Profil', icon: User },
@@ -18,7 +18,8 @@ const tabs = [
 
 export default function TopNav() {
   const pathname = usePathname()
-  const { language } = useLanguage()
+  const { language, setLanguage } = useLanguage()
+  const { toggleTheme } = useTheme()
   const [open, setOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -59,6 +60,18 @@ export default function TopNav() {
               <Icon size={18} aria-hidden="true" /><span>{labels[language]}</span>
             </Link>
           ))}
+          <div className="app-nav-tools">
+            <button type="button" onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
+              className="check-tool" style={{ backgroundColor: 'var(--color-surface)' }}
+              title="Switch language" aria-label="Switch language">
+              <Globe size={20} style={{ color: 'var(--color-text-primary)' }} aria-hidden="true" />
+            </button>
+            <button type="button" onClick={toggleTheme}
+              className="check-tool" style={{ backgroundColor: 'var(--color-surface)' }}
+              title="Toggle theme" aria-label="Toggle color theme">
+              <Palette size={20} style={{ color: 'var(--color-text-primary)' }} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </div>
     </nav>

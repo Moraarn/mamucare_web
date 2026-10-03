@@ -158,30 +158,30 @@ export default function HospitalListDebug({ userLocation }: HospitalListDebugPro
         {hospitals.map((hospital, index) => (
           <div
             key={index}
-            className="border rounded-xl p-3 flex items-center gap-3"
+            className="summary-hospital"
             style={{
               backgroundColor: 'var(--color-surface)',
               borderColor: 'var(--color-border)'
             }}
           >
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+            <div className="summary-hospital-icon"
               style={{ backgroundColor: 'var(--color-green-light)' }}
             >
               <MapPin size={16} style={{ color: 'var(--color-primary)' }} />
             </div>
 
             <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-sm truncate"
+              <h4 className="summary-hospital-name"
                 style={{ color: 'var(--color-text-primary)' }}
               >
                 {hospital.name}
               </h4>
-              <div className="flex items-center gap-2 text-xs"
+              <div className="summary-hospital-meta"
                 style={{ color: 'var(--color-text-secondary)' }}
               >
                 <span>{hospital.distance}</span>
                 <span>•</span>
-                <span>{hospital.hours}</span>
+                <span className={/closed/i.test(hospital.hours || '') ? 'facility-closed' : 'facility-open'}>{hospital.hours}</span>
                 {hospital.services && (
                   <>
                     <span>•</span>
@@ -202,10 +202,10 @@ export default function HospitalListDebug({ userLocation }: HospitalListDebugPro
 
             <button
               onClick={() => window.open(hospital.mapsUrl, '_blank')}
-              className="px-3 py-1 text-xs font-medium rounded-lg hover:bg-opacity-90 transition-colors"
+              className="summary-hospital-go"
               style={{
                 backgroundColor: 'var(--color-primary)',
-                color: 'white'
+                color: 'var(--color-on-primary)'
               }}
             >
               Go

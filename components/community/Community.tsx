@@ -1,7 +1,10 @@
+'use client'
+
 import { useState } from "react";
+import { Users, Heart, ChevronDown, ArrowUpRight, Info } from "lucide-react";
 
 /* ---------- 1. Replace these with your real WhatsApp group invite links ---------- */
-const WHATSAPP_EXPECTANT = "https://https://chat.whatsapp.com/EpCcr513PXN1kveWWGhq48";
+const WHATSAPP_EXPECTANT = "https://chat.whatsapp.com/EpCcr513PXN1kveWWGhq48";
 const WHATSAPP_POSTPARTUM = "https://chat.whatsapp.com/EMvQs7dan4VIQbMsL6KV4w";
 
 /* ---------- 2. Content ---------- */
@@ -14,8 +17,6 @@ interface Option {
   invite: string;
   buttonLabel: string;
   link: string;
-  accent: string; // main colour for this option
-  tint: string; // soft background for this option
 }
 
 const OPTIONS: Option[] = [
@@ -35,8 +36,6 @@ const OPTIONS: Option[] = [
       "Want to learn more or hear from other mothers on the same journey? Join our Expectant Mothers WhatsApp group below.",
     buttonLabel: "Join the Expectant Mothers group",
     link: WHATSAPP_EXPECTANT,
-    accent: "#1F6F66",
-    tint: "#E3F1EE",
   },
   {
     id: "postpartum",
@@ -54,8 +53,6 @@ const OPTIONS: Option[] = [
       "Want support, advice, or just a friendly space to share? Join our Postpartum Mothers WhatsApp group below.",
     buttonLabel: "Join the Postpartum Mothers group",
     link: WHATSAPP_POSTPARTUM,
-    accent: "#9C3D72",
-    tint: "#F7E6EF",
   },
 ];
 
@@ -67,10 +64,10 @@ export default function MaternalCarePage() {
     setOpenId((current) => (current === id ? null : id));
 
   return (
-    <main className="mc-page">
-      <style>{css}</style>
+    <div className="mc-page">
 
       <header className="mc-hero">
+        <span className="mc-eyebrow"><Users size={16} aria-hidden="true" /> Your community</span>
         <h1>Mothers caring for mothers</h1>
         <p>
           A community for every stage of motherhood. Choose where you are right
@@ -78,49 +75,47 @@ export default function MaternalCarePage() {
         </p>
       </header>
 
+      <p className="mc-section-label">Find support for your stage</p>
       <section className="mc-list" aria-label="Choose your stage">
         {OPTIONS.map((opt) => {
           const isOpen = openId === opt.id;
           return (
             <div
               key={opt.id}
-              className="mc-item"
-              style={
-                {
-                  "--accent": opt.accent,
-                  "--tint": opt.tint,
-                } as React.CSSProperties
-              }
+              className={`mc-item ${isOpen ? "mc-item-open" : ""}`}
             >
               <button
+                type="button"
                 className="mc-trigger"
                 aria-expanded={isOpen}
                 aria-controls={`panel-${opt.id}`}
                 id={`trigger-${opt.id}`}
                 onClick={() => toggle(opt.id)}
               >
-                <span>
+                <span className="mc-stage-icon"><Heart size={22} aria-hidden="true" /></span>
+                <span className="mc-trigger-copy">
                   <span className="mc-title">{opt.title}</span>
                   <span className="mc-subtitle">{opt.subtitle}</span>
                 </span>
-                <span className={`mc-chevron ${isOpen ? "open" : ""}`} aria-hidden="true">
-                  ▾
-                </span>
+                <ChevronDown size={20} className={`mc-chevron ${isOpen ? "open" : ""}`} aria-hidden="true" />
               </button>
 
               <div
                 id={`panel-${opt.id}`}
+                hidden={!isOpen}
                 role="region"
                 aria-labelledby={`trigger-${opt.id}`}
                 className={`mc-panel ${isOpen ? "open" : ""}`}
               >
                 <div className="mc-panel-inner">
                   <p className="mc-message">{opt.message}</p>
+                  <h2 className="mc-tips-heading">Caring for yourself</h2>
                   <ul>
                     {opt.tips.map((tip) => (
                       <li key={tip}>{tip}</li>
                     ))}
                   </ul>
+                  <div className="mc-group">
                   <p className="mc-invite">{opt.invite}</p>
                   <a
                     className="mc-join"
@@ -128,8 +123,9 @@ export default function MaternalCarePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {opt.buttonLabel}
+                    {opt.buttonLabel}<ArrowUpRight size={18} aria-hidden="true" />
                   </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,77 +134,11 @@ export default function MaternalCarePage() {
       </section>
 
       <footer className="mc-footer">
-        This community shares general support and is not a substitute for
-        medical advice. In an emergency, go to your nearest health facility.
+        <Info size={16} aria-hidden="true" />
+        <p>This community shares general support and is not a substitute for
+        medical advice. In an emergency, go to your nearest health facility.</p>
       </footer>
-    </main>
+    </div>
   );
 }
 
-/* ---------- 4. Styles (colour tokens at the top) ---------- */
-const css = `
-:root {
-  --bg: #F5F0F6;
-  --ink: #2B1A2E;
-  --muted: #6A5A6D;
-  --card: #FFFFFF;
-  --whatsapp: #0E7C66;
-}
-.mc-page {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: "Georgia", "Times New Roman", serif;
-  padding: 48px 20px 40px;
-  box-sizing: border-box;
-}
-.mc-hero { max-width: 640px; margin: 0 auto 32px; text-align: left; }
-.mc-hero h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.1; margin: 0 0 12px; }
-.mc-hero p { font-size: 1.1rem; line-height: 1.6; color: var(--muted); margin: 0; }
-
-.mc-list { max-width: 640px; margin: 0 auto; display: grid; gap: 16px; }
-.mc-item {
-  background: var(--card);
-  border-radius: 14px;
-  border-left: 8px solid var(--accent);
-  box-shadow: 0 1px 3px rgba(43, 26, 46, 0.12);
-  overflow: hidden;
-}
-.mc-trigger {
-  width: 100%;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 20px 22px;
-  background: transparent; border: 0; cursor: pointer; text-align: left;
-  font: inherit; color: inherit;
-}
-.mc-trigger:hover { background: var(--tint); }
-.mc-trigger:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
-.mc-title { display: block; font-size: 1.35rem; font-weight: 700; color: var(--accent); }
-.mc-subtitle { display: block; margin-top: 4px; font-family: system-ui, sans-serif; font-size: 0.95rem; color: var(--muted); }
-.mc-chevron { font-size: 1.4rem; color: var(--accent); transition: transform 0.25s ease; }
-.mc-chevron.open { transform: rotate(180deg); }
-
-.mc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
-.mc-panel.open { grid-template-rows: 1fr; }
-.mc-panel-inner { overflow: hidden; min-height: 0; padding: 0 22px; background: var(--tint); }
-.mc-panel.open .mc-panel-inner { padding: 20px 22px 24px; }
-
-.mc-message { font-size: 1.1rem; line-height: 1.6; margin: 0 0 12px; font-style: italic; }
-.mc-panel ul { margin: 0 0 18px; padding-left: 20px; font-family: system-ui, sans-serif; line-height: 1.6; }
-.mc-panel li { margin-bottom: 6px; }
-.mc-invite { font-weight: 700; line-height: 1.5; margin: 0 0 14px; }
-.mc-join {
-  display: inline-block;
-  background: var(--whatsapp); color: #fff;
-  font-family: system-ui, sans-serif; font-weight: 600;
-  padding: 12px 20px; border-radius: 999px; text-decoration: none;
-}
-.mc-join:hover { filter: brightness(1.1); }
-.mc-join:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-
-.mc-footer { max-width: 640px; margin: 36px auto 0; font-family: system-ui, sans-serif; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
-
-@media (prefers-reduced-motion: reduce) {
-  .mc-panel, .mc-chevron { transition: none; }
-}
-`;

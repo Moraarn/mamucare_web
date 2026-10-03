@@ -57,6 +57,7 @@ export default function CallUI({
 
   return (
     <AppShell
+      aiGuidance
       contentWidth="reading"
     >
       <div className="flex flex-col h-full px-4 py-6 space-y-6">
