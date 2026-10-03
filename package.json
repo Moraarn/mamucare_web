@@ -1,0 +1,39 @@
+{
+  "name": "CystaNiva-lite",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
+    "axios": "^1.15.2",
+    "cookie-parser": "^1.4.7",
+    "date-fns": "^4.1.0",
+    "libphonenumber-js": "^1.13.14",
+    "lucide-react": "^0.363.0",
+    "next": "^14.2.35",
+    "next-api-bridge": "^0.1.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-phone-input-2": "^2.15.1",
+    "sonner": "^2.0.7",
+    "zustand": "^4.5.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/node": "^20.19.39",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.5.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.3",
+    "postcss": "^8.5.12",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
+  }
+}

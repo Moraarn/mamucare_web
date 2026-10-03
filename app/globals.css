@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* CSS Variables for Theme */
+:root {
+  --color-primary: #0d6e40;
+  --color-primary-dark: #10b981;
+  --color-primary-light: #059669;
+  --color-danger: #b91c1c;
+  --color-warning: #b45309;
+  --color-background: #ffffff;
+  --color-background-dark: hsl(102, 25%, 10%);
+  --color-surface: #f5f5f4;
+  --color-surface-dark: #1f2937;
+  --color-border: #e5e7eb;
+  --color-border-dark: #374151;
+  --color-text-primary: hsl(102, 25%, 10%);
+  --color-text-primary-dark: #f9fafb;
+  --color-text-secondary: #6b7280;
+  --color-text-secondary-dark: #9ca3af;
+  --color-green-light: #e8f5ee;
+  --color-green-light-dark: #064e3b;
+  --color-amber-light: #fef3cd;
+  --color-amber-light-dark: #78350f;
+  --color-red-light: #fde8e8;
+  --color-red-light-dark: #7f1d1d;
+}
+
+[data-theme="dark"] {
+  --color-primary: #10b981;
+  --color-background: #0a1f14;
+  --color-surface: #142a1d;
+  --color-border: #1e3d2b;
+  --color-text-primary: #f0fdf4;
+  --color-text-secondary: #86efac;
+  --color-green-light: #064e3b;
+  --color-amber-light: #78350f;
+  --color-red-light: #7f1d1d;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Dark mode transitions */
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+
+}
+
+@layer components {
+  .status-bar {
+    @apply min-h-16 shrink-0 text-white flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 font-medium;
+    background-color: var(--color-primary);
+  }
+  
+  .bottom-nav {
+    @apply h-14 border-t border-border flex items-center justify-around;
+    background-color: var(--color-background);
+    border-color: var(--color-border);
+  }
+  
+  .nav-tab {
+    @apply flex flex-col items-center justify-center gap-1 py-1 px-3 transition-colors;
+    color: var(--color-text-secondary);
+  }
+  
+  .nav-tab.active {
+    color: var(--color-primary);
+  }
+  
+  .btn-primary {
+    @apply py-3 px-6 rounded-xl font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none;
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .btn-primary:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+  
+  .btn-outline {
+    @apply py-3 px-6 rounded-xl font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background-color: transparent;
+  }
+  
+  .btn-outline:hover:not(:disabled) {
+    background-color: var(--color-green-light);
+  }
+  
+  .risk-badge-low {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+    background-color: var(--color-green-light);
+    color: var(--color-green-dark);
+  }
+  
+  .risk-badge-medium {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+    background-color: var(--color-amber-light);
+    color: var(--color-amber-dark);
+  }
+  
+  .risk-badge-high {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+    background-color: var(--color-red-light);
+    color: var(--color-red-dark);
+  }
+}
+
+@layer components {
+  .app-shell { @apply min-h-screen-dvh; background: var(--color-surface); }
+  .app-workspace { @apply min-w-0 flex flex-col min-h-screen-dvh; }
+  .app-shell-with-nav { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
+  .app-content { @apply w-full max-w-7xl mx-auto min-w-0 flex-1 p-4 sm:p-6 lg:p-8; }
+  .app-content-reading { @apply max-w-3xl; }
+  .app-nav { @apply fixed bottom-0 inset-x-0 z-30 border-t; background: var(--color-background); border-color: var(--color-border); padding-bottom: env(safe-area-inset-bottom); }
+  .app-brand { @apply hidden items-center gap-3 font-bold text-xl; color: var(--color-primary); }
+  .app-nav-links { @apply flex justify-around; }
+  .app-nav-link { @apply flex min-h-[4.5rem] flex-1 flex-col items-center justify-center gap-1 px-2 text-xs; color: var(--color-text-secondary); }
+  .app-nav-link[aria-current='page'] { background: var(--color-green-light); color: var(--color-primary); }
+  .app-nav-link:hover { background: var(--color-surface); }
+  /* Shared sign-in / registration shell; forms remain first in reading order. */
+  .auth-layout {
+    @apply h-[100dvh] min-h-0 overflow-hidden flex items-center justify-center sm:p-4 lg:p-6;
+    background: radial-gradient(ellipse at top left, var(--color-green-light), transparent 65%), var(--color-surface);
+  }
+  .auth-layout.auth-signup,
+  .auth-layout.auth-signin {
+    background-image: linear-gradient(rgba(6, 78, 59, 0.28), rgba(6, 78, 59, 0.42)), url('/images/signup.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .auth-card {
+    @apply grid h-full max-h-[820px] w-full max-w-[1240px] min-h-0 min-w-0 overflow-hidden md:grid-cols-[48fr_52fr] sm:rounded-3xl sm:border sm:p-2;
+    background: var(--color-background);
+    border-color: var(--color-border);
+    box-shadow: 0 24px 80px -32px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+  .auth-form-region { @apply flex min-h-0 min-w-0 flex-col px-5 py-5 sm:px-6 lg:px-10; }
+  .auth-brand { @apply flex shrink-0 items-center gap-2.5 pb-4 text-lg font-semibold tracking-tight; }
+  .auth-brand-mark { @apply flex h-9 w-9 items-center justify-center rounded-xl text-white; background: var(--color-primary); }
+  .auth-form-content { @apply mx-auto my-auto w-full max-w-md min-h-0 overflow-y-auto overscroll-contain px-1 py-3; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+  .auth-form-heading { @apply mb-5 text-center; }
+
+  .auth-footer { @apply flex shrink-0 items-center gap-2 pt-4 text-xs; color: var(--color-text-secondary); }
+  .auth-visual { @apply relative hidden min-w-0 overflow-hidden rounded-2xl md:block; background: var(--color-green-light); }
+  .auth-visual-shade { @apply absolute inset-0; background: linear-gradient(180deg, transparent 35%, color-mix(in srgb, var(--color-primary) 35%, transparent) 60%, var(--color-green-light-dark) 100%); }
+  .auth-visual-label { @apply absolute left-6 top-6 flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-xs text-white backdrop-blur-md; background: var(--color-primary); }
+  .auth-visual-copy { @apply absolute inset-x-0 bottom-0 p-7 text-center text-white lg:p-10 lg:pb-12; }
+  .app-shell-viewport { @apply h-[100dvh] min-h-0; }
+  .app-shell-viewport .app-workspace { @apply h-full min-h-0; }
+  .app-shell-viewport .app-content { @apply flex flex-col min-h-0; }
+  .chat-panel { @apply flex flex-col flex-1 min-h-0 w-full max-w-4xl mx-auto border rounded-2xl overflow-hidden; background: var(--color-background); }
+  .content-panel { @apply rounded-2xl border p-4 sm:p-6; background: var(--color-background); border-color: var(--color-border); }
+  @screen md {
+    .app-shell-with-nav { @apply pl-24 pb-0; }
+    .app-nav { @apply inset-y-0 left-0 right-auto w-24 border-t-0 border-r p-3; }
+    .app-brand { @apply flex justify-center py-6; }
+    .app-brand span { @apply hidden; }
+    .app-nav-links { @apply flex-col gap-2; }
+    .app-nav-link { @apply flex-none rounded-xl; }
+  }
+  @screen lg {
+    .app-shell-with-nav { @apply pl-60; }
+    .app-nav { @apply w-60 p-5; }
+    .app-brand { @apply justify-start; }
+    .app-brand span { @apply inline; }
+    .app-nav-link { @apply min-h-12 flex-row justify-start gap-3 px-4 text-sm; }
+  }
+}
+
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+
+/* Keep inputs comfortable while reducing decoration on shorter screens. */
+@media (max-height: 760px) {
+  .auth-form-region { padding-top: 12px; padding-bottom: 12px; }
+  .auth-brand { padding-bottom: 8px; }
+  .auth-form-heading { margin-bottom: 14px; }
+  .auth-form-content { padding-top: 8px; padding-bottom: 8px; }
+  .auth-footer { display: none; }
+}
+@media (max-height: 560px) {
+  .auth-visual-copy { padding: 20px; }
+  .auth-visual-copy h2 { font-size: 1.5rem; }
+  .auth-visual-copy > p:first-child,
+  .auth-visual-copy > div { display: none; }
+}
