@@ -24,7 +24,7 @@ const statusOptions = [
   {
     value: 'postpartum_late' as UserStatus,
     emoji: '🌸',
-    label: 'Recovering',
+    label: 'Postpartum',
     subtitle: 'Birth was 6–12 weeks ago',
   },
   {
