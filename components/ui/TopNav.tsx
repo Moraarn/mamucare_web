@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Activity, MessageCircle, User, Heart, Menu, X } from 'lucide-react'
+import { Home, Activity, MessageCircle, User, Heart, Menu, X, Users} from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const tabs = [
@@ -11,6 +11,9 @@ const tabs = [
   { path: '/check', en: 'Checkup', sw: 'Angalia', fr: 'Bilan', icon: Activity },
   { path: '/talk', en: 'Talk', sw: 'Zungumza', fr: 'Discuter', icon: MessageCircle },
   { path: '/profile', en: 'Profile', sw: 'Wasifu', fr: 'Profil', icon: User },
+  { path: '/community', en: 'Community', sw: 'Jamii', fr: 'Communauté', icon: Users },
+
+
 ]
 
 export default function TopNav() {
