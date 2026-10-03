@@ -402,9 +402,6 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
   return (
     <AppShell
       viewport
-      statusBar={{
-        title: t.title
-      }}
     >
       <div className="chat-panel">
         {/* Voice Status Bar */}

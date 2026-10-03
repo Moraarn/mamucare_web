@@ -77,10 +77,9 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
 
         .ep-wrap {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           display: flex;
           flex-direction: column;
           gap: 28px;
@@ -121,7 +120,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
         .ep-input, .ep-select {
           width: 100%;
           padding: 10px 13px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.845rem;
           font-weight: 500;
           color: var(--color-text-primary);
@@ -148,7 +147,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
 
         .ep-input:focus, .ep-select:focus {
           border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 99,102,241), 0.1);
+          box-shadow: 0 0 0 3px rgb(var(--rgb-primary) / 0.1);
           background: rgba(0,0,0,0.01);
         }
 
@@ -203,7 +202,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
         .ep-status-option.selected {
           border-color: var(--color-primary);
           background: rgba(var(--color-primary-rgb, 99,102,241), 0.05);
-          box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 99,102,241), 0.08);
+          box-shadow: 0 0 0 3px rgb(var(--rgb-primary) / 0.08);
         }
 
         .ep-status-option input[type="radio"] {

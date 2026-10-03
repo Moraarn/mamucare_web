@@ -421,7 +421,7 @@ export default function CheckPageClient() {
 
   if (isLoading) {
     return (
-      <AppShell contentWidth="reading" statusBar={{ title: 'Symptom check' }}>
+      <AppShell contentWidth="reading">
         <div className="content-panel py-12 text-center" role="status">Loading your questions...</div>
       </AppShell>
     )
@@ -429,7 +429,7 @@ export default function CheckPageClient() {
 
   if (!user || questions.length === 0) {
     return (
-      <AppShell contentWidth="reading" statusBar={{ title: 'Symptom check' }}>
+      <AppShell contentWidth="reading">
         <div className="content-panel py-12 text-center" role="alert">Failed to load questions. Please refresh to try again.</div>
       </AppShell>
     )
@@ -438,14 +438,6 @@ export default function CheckPageClient() {
   return (
     <AppShell
       contentWidth={showResult ? 'wide' : 'reading'}
-      statusBar={{
-        title: 'Symptom check',
-        showBack: true,
-        rightContent: showResult
-          ? ''
-          : `Q${currentQuestionIndex + 1} of ${questions.length}`,
-        color: 'primary',
-      }}
     >
       <div className="flex flex-col h-full">
         <div className="check-toolbar">

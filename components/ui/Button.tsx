@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', fullWidth = false, children, disabled, ...props }, ref) => {
-    const baseClasses = 'py-3 px-6 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2'
+    const baseClasses = 'theme-button py-3 px-6 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2'
     const widthClasses = fullWidth ? 'w-full' : ''
     
     const getButtonStyles = () => {
@@ -22,7 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
       return {
         backgroundColor: 'var(--color-primary)',
-        color: 'white',
+        color: 'var(--color-on-primary)',
         borderColor: 'transparent'
       }
     }
@@ -31,7 +31,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={`${baseClasses} ${widthClasses} ${className} ${
-          variant === 'outline' ? 'hover:bg-opacity-10' : 'hover:opacity-90'
+          variant === 'outline' ? 'theme-button-outline' : 'theme-button-primary'
         } disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none`}
         style={getButtonStyles()}
         disabled={disabled}

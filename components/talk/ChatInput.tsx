@@ -97,14 +97,14 @@ export default function ChatInput({ onSendMessage, onVoiceInput, onStartCall, is
           onClick={onStartCall}
           className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all hover:opacity-90 shadow-lg"
           style={{
-            backgroundColor: '#059669',
+            backgroundColor: 'var(--color-primary)',
             color: 'white'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#047857'
+            e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#059669'
+            e.currentTarget.style.backgroundColor = 'var(--color-primary)'
           }}
         >
           <Phone size={16} />

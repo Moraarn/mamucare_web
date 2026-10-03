@@ -12,7 +12,6 @@ import { RegisterData, SignupStepperProps } from '../../lib/types'
 
 export default function SignupStepper({
   onSwitchToLogin,
-  onSuccess,
 }: SignupStepperProps) {
   const router = useRouter()
 
@@ -103,16 +102,14 @@ export default function SignupStepper({
       return
     }
 
-    if (result.requiresVerification || result.nextStep) {
-      // Preserve existing verification flow if present.
+    if (!result.requiresVerification) {
+      setError('Unable to start phone verification. Please try again.')
       setIsLoading(false)
       setIsSubmitted(false)
       return
     }
 
-    onSuccess()
-    router.replace('/home')
-    router.refresh()
+    router.push('/auth/verify')
   }
 
   const nextStep = () => {

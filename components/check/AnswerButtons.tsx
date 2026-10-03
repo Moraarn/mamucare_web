@@ -15,8 +15,8 @@ const translations = {
   }
 }
 
-export default function AnswerButtons({ 
-  selectedAnswer, 
+export default function AnswerButtons({
+  selectedAnswer,
   onAnswerSelect,
   language = 'en'
 }: AnswerButtonsProps) {
@@ -29,25 +29,25 @@ export default function AnswerButtons({
         onClick={() => onAnswerSelect(true)}
         className={`w-full p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${
           selectedAnswer === true
-            ? 'border-danger'
+            ? 'border-primary'
             : 'border-border hover:border-opacity-70'
         }`}
         style={{
-          backgroundColor: selectedAnswer === true 
-            ? 'var(--color-red-light)' 
+          backgroundColor: selectedAnswer === true
+            ? 'var(--color-surface-soft)'
             : 'var(--color-background)'
         }}
       >
-        <div 
+        <div
           className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-            selectedAnswer === true ? 'border-danger' : ''
+            selectedAnswer === true ? 'border-primary' : ''
           }`}
           style={{
-            borderColor: selectedAnswer === true 
-              ? 'var(--color-danger)' 
+            borderColor: selectedAnswer === true
+              ? 'var(--color-primary)'
               : 'var(--color-border)',
-            backgroundColor: selectedAnswer === true 
-              ? 'var(--color-danger)' 
+            backgroundColor: selectedAnswer === true
+              ? 'var(--color-primary)'
               : 'transparent'
           }}
         >
@@ -55,11 +55,11 @@ export default function AnswerButtons({
             <div className="w-2 h-2 bg-white rounded-full" />
           )}
         </div>
-        <span 
+        <span
           className="font-medium"
           style={{
-            color: selectedAnswer === true 
-              ? 'var(--color-red-dark)' 
+            color: selectedAnswer === true
+              ? 'var(--color-primary)'
               : 'var(--color-text-primary)'
           }}
         >
@@ -76,21 +76,21 @@ export default function AnswerButtons({
             : 'border-border hover:border-opacity-70'
         }`}
         style={{
-          backgroundColor: selectedAnswer === false 
-            ? 'var(--color-green-light)' 
+          backgroundColor: selectedAnswer === false
+            ? 'var(--color-surface-soft)'
             : 'var(--color-background)'
         }}
       >
-        <div 
+        <div
           className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
             selectedAnswer === false ? 'border-primary' : ''
           }`}
           style={{
-            borderColor: selectedAnswer === false 
-              ? 'var(--color-primary)' 
+            borderColor: selectedAnswer === false
+              ? 'var(--color-primary)'
               : 'var(--color-border)',
-            backgroundColor: selectedAnswer === false 
-              ? 'var(--color-primary)' 
+            backgroundColor: selectedAnswer === false
+              ? 'var(--color-primary)'
               : 'transparent'
           }}
         >
@@ -98,11 +98,11 @@ export default function AnswerButtons({
             <div className="w-2 h-2 bg-white rounded-full" />
           )}
         </div>
-        <span 
+        <span
           className="font-medium"
           style={{
-            color: selectedAnswer === false 
-              ? 'var(--color-green-dark)' 
+            color: selectedAnswer === false
+              ? 'var(--color-primary)'
               : 'var(--color-text-primary)'
           }}
         >

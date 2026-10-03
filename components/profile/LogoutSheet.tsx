@@ -14,11 +14,10 @@ export default function LogoutSheet({ isOpen, onConfirm, onCancel }: LogoutSheet
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:wght@400;500&display=swap');
 
         .overlay {
           position: fixed; inset: 0;
-          background: rgba(0,0,0,0.45);
+          background: rgb(var(--color-shadow) / 0.45);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           z-index: 200;
@@ -34,22 +33,22 @@ export default function LogoutSheet({ isOpen, onConfirm, onCancel }: LogoutSheet
         }
 
         .sheet {
-          font-family: 'DM Sans', sans-serif;
-          background: rgba(255,255,255,0.95);
+          font-family: var(--font-body);
+          background: var(--color-background);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255,255,255,0.7);
+          border: 1px solid var(--color-border);
           border-radius: 22px;
           padding: 1.5rem;
           width: 100%; max-width: 400px;
-          box-shadow: 0 8px 16px rgba(0,0,0,0.06), 0 24px 48px rgba(0,0,0,0.12);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
           animation: slideUp 0.32s cubic-bezier(0.22,1,0.36,1);
         }
 
         [data-theme="dark"] .sheet {
-          background: rgba(30,32,40,0.92);
-          border-color: rgba(255,255,255,0.07);
-          box-shadow: 0 8px 16px rgba(0,0,0,0.3), 0 24px 48px rgba(0,0,0,0.4);
+          background: var(--color-surface);
+          border-color: var(--color-border);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
 
         .sheet-icon {
@@ -60,7 +59,7 @@ export default function LogoutSheet({ isOpen, onConfirm, onCancel }: LogoutSheet
         }
 
         .sheet-title {
-          font-family: 'Fraunces', serif;
+          font-family: var(--font-heading);
           font-size: 1.15rem; font-weight: 500;
           color: var(--color-text-primary);
           letter-spacing: -0.02em;
@@ -80,8 +79,8 @@ export default function LogoutSheet({ isOpen, onConfirm, onCancel }: LogoutSheet
         .sheet-confirm {
           width: 100%; padding: 12px;
           border-radius: 13px;
-          background: var(--color-danger); color: white;
-          font-family: 'DM Sans', sans-serif;
+          background: var(--color-danger); color: var(--color-on-primary);
+          font-family: var(--font-body);
           font-size: 0.845rem; font-weight: 600;
           border: none; cursor: pointer;
           letter-spacing: 0.01em;
@@ -94,7 +93,7 @@ export default function LogoutSheet({ isOpen, onConfirm, onCancel }: LogoutSheet
           width: 100%; padding: 12px;
           border-radius: 13px;
           background: transparent; color: var(--color-text-secondary);
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.845rem; font-weight: 500;
           border: 1px solid var(--color-border); cursor: pointer;
           transition: background 0.15s;

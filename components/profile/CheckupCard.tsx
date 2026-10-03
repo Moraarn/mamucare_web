@@ -10,9 +10,9 @@ interface CheckupCardProps {
 }
 
 const riskStyle = (level: string) => {
-  if (level === 'high')   return { bg: 'var(--color-red-light)', color: 'var(--color-danger)', dot: '#EF4444' }
-  if (level === 'medium') return { bg: 'var(--color-amber-light)', color: 'var(--color-warning)', dot: '#F59E0B' }
-  return                         { bg: 'var(--color-green-light)', color: '#16A34A', dot: '#22C55E' }
+  if (level === 'high')   return { bg: 'var(--color-red-light)', color: 'var(--color-danger)', dot: 'var(--color-danger)' }
+  if (level === 'medium') return { bg: 'var(--color-amber-light)', color: 'var(--color-warning)', dot: 'var(--color-warning)' }
+  return                         { bg: 'var(--color-green-light)', color: 'var(--color-success)', dot: 'var(--color-success)' }
 }
 
 export default function CheckupCard({ lastCheckup }: CheckupCardProps) {
@@ -23,34 +23,29 @@ export default function CheckupCard({ lastCheckup }: CheckupCardProps) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
 
         .checkup-float {
           margin: -1.75rem 1.25rem 0;
           position: relative;
           z-index: 10;
-          background: rgba(255, 255, 255, 0.92);
+          background: var(--color-background);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           border-radius: 18px;
           padding: 1rem 1.1rem;
-          border: 1px solid rgba(255, 255, 255, 0.7);
-          box-shadow:
-            0 4px 6px rgba(0,0,0,0.04),
-            0 12px 28px rgba(0,0,0,0.08);
+          border: 1px solid var(--color-border);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
         }
 
         [data-theme="dark"] .checkup-float {
-          background: rgba(30, 32, 40, 0.88);
-          border-color: rgba(255, 255, 255, 0.06);
-          box-shadow:
-            0 4px 6px rgba(0,0,0,0.2),
-            0 12px 28px rgba(0,0,0,0.35);
+          background: var(--color-surface);
+          border-color: var(--color-border);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
 
         @keyframes fadeUp {
@@ -68,12 +63,12 @@ export default function CheckupCard({ lastCheckup }: CheckupCardProps) {
           width: 38px;
           height: 38px;
           border-radius: 11px;
-          background: linear-gradient(140deg, var(--color-primary), var(--color-primary-dark));
+          background: var(--color-primary);
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
 
         .cf-eyebrow {

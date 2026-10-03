@@ -17,17 +17,17 @@ export default function AuthHeader({ onSignIn, onCreateAccount, activeTab = 'sig
         <div 
           className="w-16 h-16 rounded-2xl flex items-center justify-center mb-3"
           style={{ 
-            backgroundColor: '#059669',
-            boxShadow: '0 2px 8px rgba(5, 150, 105, 0.2)'
+            backgroundColor: 'var(--color-primary)',
+            boxShadow: '0 2px 8px rgb(var(--color-shadow) / 0.12)'
           }}
         >
-          <Heart size={32} className="text-white" fill="white" />
+          <Heart size={32} className="text-[var(--color-on-primary)]" fill="white" />
         </div>
         
         {/* App Name */}
         <h1 
           className="text-2xl font-bold mb-1 tracking-tight"
-          style={{ color: '#1f2937' }}
+          style={{ color: 'var(--color-text-primary)' }}
         >
           MamuCare
         </h1>
@@ -35,7 +35,7 @@ export default function AuthHeader({ onSignIn, onCreateAccount, activeTab = 'sig
         {/* Subtitle */}
         <p 
           className="text-xs font-medium"
-          style={{ color: '#6b7280' }}
+          style={{ color: 'var(--color-text-secondary)' }}
         >
           Maternal health risk checker
         </p>
@@ -46,11 +46,11 @@ export default function AuthHeader({ onSignIn, onCreateAccount, activeTab = 'sig
         <button
           onClick={onSignIn}
           className={`flex-1 py-2.5 px-4 rounded-xl font-medium transition-all text-sm ${
-            activeTab === 'signin' ? 'text-white' : 'text-gray-700'
+            activeTab === 'signin' ? 'text-white' : 'text-text-primary'
           }`}
           style={{
-            backgroundColor: activeTab === 'signin' ? '#059669' : 'white',
-            border: activeTab === 'signin' ? 'none' : '1px solid #e5e7eb'
+            backgroundColor: activeTab === 'signin' ? 'var(--color-primary)' : 'var(--color-background)',
+            border: activeTab === 'signin' ? 'none' : '1px solid var(--color-border)'
           }}
         >
           Sign in
@@ -58,11 +58,11 @@ export default function AuthHeader({ onSignIn, onCreateAccount, activeTab = 'sig
         <button
           onClick={onCreateAccount}
           className={`flex-1 py-2.5 px-4 rounded-xl font-medium transition-all text-sm ${
-            activeTab === 'signup' ? 'text-white' : 'text-gray-700'
+            activeTab === 'signup' ? 'text-white' : 'text-text-primary'
           }`}
           style={{
-            backgroundColor: activeTab === 'signup' ? '#059669' : 'white',
-            border: activeTab === 'signup' ? 'none' : '1px solid #e5e7eb'
+            backgroundColor: activeTab === 'signup' ? 'var(--color-primary)' : 'var(--color-background)',
+            border: activeTab === 'signup' ? 'none' : '1px solid var(--color-border)'
           }}
         >
           Create account

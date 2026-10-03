@@ -8,9 +8,9 @@ interface HistoryAccordionProps {
 }
 
 const riskStyle = (level: string) => {
-  if (level === 'high')   return { bg: 'var(--color-red-light)', color: 'var(--color-danger)', dot: '#EF4444' }
-  if (level === 'medium') return { bg: 'var(--color-amber-light)', color: 'var(--color-warning)', dot: '#F59E0B' }
-  return                         { bg: 'var(--color-green-light)', color: '#16A34A', dot: '#22C55E' }
+  if (level === 'high')   return { bg: 'var(--color-red-light)', color: 'var(--color-danger)', dot: 'var(--color-danger)' }
+  if (level === 'medium') return { bg: 'var(--color-amber-light)', color: 'var(--color-warning)', dot: 'var(--color-warning)' }
+  return                         { bg: 'var(--color-green-light)', color: 'var(--color-success)', dot: 'var(--color-success)' }
 }
 
 function Accordion({
@@ -51,26 +51,25 @@ export default function HistoryAccordion({ checkupHistory }: HistoryAccordionPro
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
 
         .accordion-card {
-          font-family: 'DM Sans', sans-serif;
-          background: rgba(255,255,255,0.92);
+          font-family: var(--font-body);
+          background: var(--color-background);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           border-radius: 18px;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.7);
-          box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.06);
+          border: 1px solid var(--color-border);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
           transition: box-shadow 0.25s cubic-bezier(0.22,1,0.36,1);
         }
         [data-theme="dark"] .accordion-card {
-          background: rgba(30,32,40,0.88);
-          border-color: rgba(255,255,255,0.06);
-          box-shadow: 0 4px 6px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3);
+          background: var(--color-surface);
+          border-color: var(--color-border);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
         .accordion-card.open {
-          box-shadow: 0 4px 8px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
 
         .accordion-trigger {
@@ -87,10 +86,10 @@ export default function HistoryAccordion({ checkupHistory }: HistoryAccordionPro
 
         .accordion-icon {
           width: 34px; height: 34px; border-radius: 10px;
-          background: linear-gradient(140deg, var(--color-primary), var(--color-primary-dark));
+          background: var(--color-primary);
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
-          box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
 
         .accordion-title {
@@ -132,7 +131,7 @@ export default function HistoryAccordion({ checkupHistory }: HistoryAccordionPro
         .h-item:hover {
           background: rgba(0,0,0,0.04);
           transform: translateX(3px);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          box-shadow: 0 4px 18px rgb(var(--color-shadow) / 0.08);
         }
 
         .h-item-left { display: flex; align-items: center; gap: 10px; }

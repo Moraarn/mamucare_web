@@ -60,13 +60,13 @@ export default function VoiceInput({ state, supported, onVoiceInput, onCancel, l
       <button type="button" onClick={busy ? onCancel : onVoiceInput} disabled={!supported}
         aria-label={busy ? t.stop : t.idle} aria-pressed={busy} aria-describedby="voice-answer-feedback"
         className="w-full p-3 rounded-xl border flex items-center gap-3 text-left disabled:opacity-60 disabled:cursor-not-allowed"
-        style={{ backgroundColor: busy ? 'var(--color-green-light)' : 'var(--color-background)', borderColor: busy ? 'var(--color-primary)' : 'var(--color-border)' }}>
+        style={{ backgroundColor: busy ? 'var(--color-surface-soft)' : 'var(--color-background)', borderColor: busy ? 'var(--color-primary)' : 'var(--color-border)' }}>
         <span className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${busy ? 'animate-pulse' : ''}`} style={{ backgroundColor: 'var(--color-primary)' }}>
-          {busy ? <Square size={16} className="text-white" aria-hidden="true" /> : <Mic size={18} className="text-white" aria-hidden="true" />}
+          {busy ? <Square size={16} className="text-[var(--color-on-primary)]" aria-hidden="true" /> : <Mic size={18} className="text-[var(--color-on-primary)]" aria-hidden="true" />}
         </span>
         <span className="text-sm font-medium">{state.status === 'starting' ? t.starting : state.status === 'listening' ? t.listening : t.idle}</span>
       </button>
-      <p id="voice-answer-feedback" role="status" aria-live="polite" aria-atomic="true" className="text-sm leading-relaxed px-1" style={{ color: 'var(--color-text-secondary)' }}>
+      <p id="voice-answer-feedback" role="status" aria-live="polite" aria-atomic="true" className="text-sm leading-relaxed px-1" style={{ color: state.status === 'error' ? 'var(--color-danger)' : state.status === 'recognized' ? 'var(--color-success)' : 'var(--color-text-secondary)' }}>
         {feedback}
       </p>
     </div>

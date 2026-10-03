@@ -12,9 +12,9 @@ interface HeroSectionProps {
 }
 
 const statusMap: Record<string, { icon: React.ReactNode; label: string }> = {
-  pregnant:         { icon: <Heart size={13} strokeWidth={2.2} color="white" />,   label: 'Pregnant' },
-  postpartum_early: { icon: <Baby size={13} strokeWidth={2.2} color="white" />,    label: 'New Mama · 0–6 weeks' },
-  postpartum_late:  { icon: <Flower2 size={13} strokeWidth={2.2} color="white" />, label: 'Recovering · 6–12 weeks' },
+  pregnant:         { icon: <Heart size={13} strokeWidth={2.2} color="var(--color-on-primary)" />,   label: 'Pregnant' },
+  postpartum_early: { icon: <Baby size={13} strokeWidth={2.2} color="var(--color-on-primary)" />,    label: 'New Mama · 0–6 weeks' },
+  postpartum_late:  { icon: <Flower2 size={13} strokeWidth={2.2} color="var(--color-on-primary)" />, label: 'Recovering · 6–12 weeks' },
 }
 
 const trimesterMap: Record<string, string> = {
@@ -25,42 +25,38 @@ const trimesterMap: Record<string, string> = {
 }
 
 export default function HeroSection({ user }: HeroSectionProps) {
-  const statusInfo = statusMap[user.status] ?? { icon: <Sparkles size={13} strokeWidth={2.2} color="white" />, label: 'Welcome' }
+  const statusInfo = statusMap[user.status] ?? { icon: <Sparkles size={13} strokeWidth={2.2} color="var(--color-on-primary)" />, label: 'Welcome' }
   const initials = user.fullName?.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase() || 'U'
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,400;0,500;1,400&display=swap');
 
         .hero {
           position: relative;
-          background: linear-gradient(150deg, var(--color-primary) 0%, var(--color-primary-dark) 55%, var(--color-primary-light) 100%);
+          background: var(--color-primary);
           padding: 1.75rem 1.5rem 4rem;
           overflow: hidden;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
         }
 
         .hero-orb1 {
           position: absolute; top: -70px; right: -50px;
           width: 240px; height: 240px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(249,168,212,0.18) 0%, transparent 70%);
+          background: transparent;
           pointer-events: none;
         }
 
         .hero-orb2 {
           position: absolute; bottom: -60px; left: -40px;
           width: 200px; height: 200px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(147,197,253,0.12) 0%, transparent 70%);
+          background: transparent;
           pointer-events: none;
         }
 
         .hero-grid {
           position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-          background-size: 32px 32px;
+          background: transparent;
           pointer-events: none;
         }
 
@@ -82,7 +78,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
 
         .avatar-ring {
           width: 68px; height: 68px; border-radius: 50%;
-          background: linear-gradient(135deg, #f9a8d4 0%, #93c5fd 50%, #86efac 100%);
+          background: var(--color-surface-soft);
           padding: 2px;
         }
 
@@ -90,31 +86,31 @@ export default function HeroSection({ user }: HeroSectionProps) {
           width: 100%; height: 100%; border-radius: 50%;
           background: var(--color-primary);
           display: flex; align-items: center; justify-content: center;
-          font-family: 'Fraunces', serif;
+          font-family: var(--font-heading);
           font-size: 1.3rem; font-weight: 500;
-          color: white;
+          color: var(--color-on-primary);
           letter-spacing: -0.02em;
         }
 
         .online-dot {
           position: absolute; bottom: 2px; right: 2px;
           width: 12px; height: 12px; border-radius: 50%;
-          background: #4ade80;
+          background: var(--color-success);
           border: 2px solid var(--color-primary);
-          box-shadow: 0 0 6px rgba(74,222,128,0.6);
+          box-shadow: none;
         }
 
         /* Name & phone */
         .hero-name {
-          font-family: 'Fraunces', serif;
+          font-family: var(--font-heading);
           font-size: 1.4rem; font-weight: 500;
-          color: white; line-height: 1.2;
+          color: var(--color-on-primary); line-height: 1.2;
           letter-spacing: -0.02em;
         }
 
         .hero-phone {
           display: inline-flex; align-items: center; gap: 5px;
-          font-size: 0.74rem; color: rgba(255,255,255,0.42);
+          font-size: 0.74rem; color: var(--color-on-primary);
           letter-spacing: 0.03em; margin-top: 3px;
         }
 
@@ -140,7 +136,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
         .status-pill-text {
           font-size: 0.78rem;
           font-weight: 500;
-          color: rgba(255,255,255,0.9);
+          color: var(--color-on-primary);
           letter-spacing: 0.01em;
         }
 
@@ -149,7 +145,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
           display: inline-flex; align-items: center; gap: 5px;
           margin-top: 8px;
           font-size: 0.67rem; font-weight: 600;
-          color: rgba(255,255,255,0.35);
+          color: var(--color-on-primary);
           letter-spacing: 0.09em; text-transform: uppercase;
         }
 
@@ -176,7 +172,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
             <div>
               <div className="hero-name">{user.fullName}</div>
               <div className="hero-phone">
-                <Phone size={11} strokeWidth={2} color="rgba(255,255,255,0.4)" />
+                <Phone size={11} strokeWidth={2} color="var(--color-on-primary)" />
                 {user.phone}
               </div>
             </div>

@@ -112,7 +112,7 @@ export default function HospitalListDebug({ userLocation }: HospitalListDebugPro
     <div className="space-y-3">
       {/* Location Permission Popup */}
       {showLocationPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[rgb(var(--color-shadow)/0.45)] flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-sm mx-4 shadow-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">

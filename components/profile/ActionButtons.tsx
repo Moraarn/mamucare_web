@@ -31,25 +31,25 @@ export default function ActionButtons({ onStartCheckup, onEditProfile, onSetting
         .btn-cta {
           width: 100%; padding: 14px;
           border-radius: 16px;
-          background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-          color: white;
-          font-family: 'DM Sans', sans-serif;
+          background: var(--color-primary);
+          color: var(--color-on-primary);
+          font-family: var(--font-body);
           font-size: 0.9rem; font-weight: 600;
           letter-spacing: 0.02em;
           border: none; cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 8px;
-          box-shadow: 0 6px 20px rgba(13, 110, 64, 0.3);
+          box-shadow: 0 6px 20px rgb(var(--color-shadow) / 0.12);
           transition: transform 0.15s, box-shadow 0.15s;
         }
-        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(13, 110, 64, 0.38); }
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgb(var(--color-shadow) / 0.16); }
         .btn-cta:active { transform: translateY(0); }
 
         .btn-row { display: flex; gap: 9px; }
         .btn-sec {
           flex: 1; padding: 12px;
           border-radius: 14px;
-          background: white; color: var(--color-text-secondary);
-          font-family: 'DM Sans', sans-serif;
+          background: var(--color-background); color: var(--color-text-secondary);
+          font-family: var(--font-body);
           font-size: 0.83rem; font-weight: 500;
           border: 1.5px solid var(--color-border); cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -70,7 +70,7 @@ export default function ActionButtons({ onStartCheckup, onEditProfile, onSetting
           width: 100%; padding: 13px;
           border-radius: 14px;
           background: var(--color-red-light); color: var(--color-danger);
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.87rem; font-weight: 500;
           border: 1.5px solid var(--color-danger); cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -100,8 +100,8 @@ export default function ActionButtons({ onStartCheckup, onEditProfile, onSetting
           onClick={onStartCheckup}
           className="w-full py-3 px-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
           style={{
-            background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
-            boxShadow: '0 6px 20px rgba(13, 110, 64, 0.3)'
+            background: 'var(--color-primary)',
+            boxShadow: '0 6px 20px rgb(var(--color-shadow) / 0.12)'
           }}
         >
           <Sparkles size={16} />

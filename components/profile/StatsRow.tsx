@@ -20,7 +20,7 @@ export default function StatsRow({ checkupHistory, user }: StatsRowProps) {
         <div
           className="text-2xl font-medium mb-1"
           style={{
-            fontFamily: 'Fraunces, serif',
+            fontFamily: 'var(--font-heading)',
             color: 'var(--color-primary)',
             lineHeight: 1
           }}
@@ -41,7 +41,7 @@ export default function StatsRow({ checkupHistory, user }: StatsRowProps) {
         <div
           className="text-2xl font-medium mb-1"
           style={{
-            fontFamily: 'Fraunces, serif',
+            fontFamily: 'var(--font-heading)',
             color: 'var(--color-primary)',
             lineHeight: 1
           }}
@@ -62,7 +62,7 @@ export default function StatsRow({ checkupHistory, user }: StatsRowProps) {
         <div
           className="text-2xl font-medium mb-1"
           style={{
-            fontFamily: 'Fraunces, serif',
+            fontFamily: 'var(--font-heading)',
             color: 'var(--color-primary)',
             lineHeight: 1
           }}

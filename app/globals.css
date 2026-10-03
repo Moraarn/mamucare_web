@@ -6,42 +6,112 @@
 
 /* CSS Variables for Theme */
 :root {
-  --color-primary: #0d6e40;
-  --color-primary-dark: #10b981;
-  --color-primary-light: #059669;
-  --color-danger: #b91c1c;
-  --color-warning: #b45309;
-  --color-background: #ffffff;
-  --color-background-dark: hsl(102, 25%, 10%);
-  --color-surface: #f4f8f5;
-  --color-green-dark: #0a4a2a;
-  --color-amber-dark: #92400e;
-  --color-red-dark: #7f1d1d;
-  --color-surface-dark: #1f2937;
-  --color-border: #e5e7eb;
-  --color-border-dark: #374151;
-  --color-text-primary: hsl(102, 25%, 10%);
-  --color-text-primary-dark: #f9fafb;
-  --color-text-secondary: #6b7280;
-  --color-text-secondary-dark: #9ca3af;
-  --color-green-light: #e8f5ee;
-  --color-green-light-dark: #064e3b;
-  --color-amber-light: #fef3cd;
-  --color-amber-light-dark: #78350f;
-  --color-red-light: #fde8e8;
-  --color-red-light-dark: #7f1d1d;
+  color-scheme: light;
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --color-on-primary: #ffffff;
+  --color-shadow: 73 59 61;
+  --color-primary: #98576b;
+  --rgb-primary: 152 87 107;
+  --color-primary-hover: #82465a;
+  --rgb-primary-hover: 130 70 90;
+  --color-primary-dark: #82465a;
+  --rgb-primary-dark: 130 70 90;
+  --color-primary-light: #b87588;
+  --rgb-primary-light: 184 117 136;
+  --color-secondary: #8a6d91;
+  --rgb-secondary: 138 109 145;
+  --color-surface-soft: #f4e7e7;
+  --rgb-surface-soft: 244 231 231;
+  --color-success: #526d57;
+  --rgb-success: 82 109 87;
+  --color-danger: #a0424e;
+  --rgb-danger: 160 66 78;
+  --color-warning: #8b652d;
+  --rgb-warning: 139 101 45;
+  --color-background: #fcf8f4;
+  --rgb-background: 252 248 244;
+  --color-background-dark: #282123;
+  --rgb-background-dark: 40 33 35;
+  --color-surface: #f5eee8;
+  --rgb-surface: 245 238 232;
+  --color-green-dark: #405a46;
+  --rgb-green-dark: 64 90 70;
+  --color-amber-dark: #785322;
+  --rgb-amber-dark: 120 83 34;
+  --color-red-dark: #873542;
+  --rgb-red-dark: 135 53 66;
+  --color-surface-dark: #342b2e;
+  --rgb-surface-dark: 52 43 46;
+  --color-border: #e5d6d2;
+  --rgb-border: 229 214 210;
+  --color-border-dark: #55454b;
+  --rgb-border-dark: 85 69 75;
+  --color-text-primary: #493b3d;
+  --rgb-text-primary: 73 59 61;
+  --color-text-primary-dark: #f7eee7;
+  --rgb-text-primary-dark: 247 238 231;
+  --color-text-secondary: #78676a;
+  --rgb-text-secondary: 120 103 106;
+  --color-text-secondary-dark: #cbb6bd;
+  --rgb-text-secondary-dark: 203 182 189;
+  --color-green-light: #e8eee4;
+  --rgb-green-light: 232 238 228;
+  --color-green-light-dark: #303f33;
+  --rgb-green-light-dark: 48 63 51;
+  --color-amber-light: #f4ead5;
+  --rgb-amber-light: 244 234 213;
+  --color-amber-light-dark: #493d28;
+  --rgb-amber-light-dark: 73 61 40;
+  --color-red-light: #f8e6e8;
+  --rgb-red-light: 248 230 232;
+  --color-red-light-dark: #4c2c33;
+  --rgb-red-light-dark: 76 44 51;
 }
 
 [data-theme="dark"] {
-  --color-primary: #10b981;
-  --color-background: #0a1f14;
-  --color-surface: #142a1d;
-  --color-border: #1e3d2b;
-  --color-text-primary: #f0fdf4;
-  --color-text-secondary: #86efac;
-  --color-green-light: #064e3b;
-  --color-amber-light: #78350f;
-  --color-red-light: #7f1d1d;
+  color-scheme: dark;
+  --color-on-primary: #282123;
+  --color-primary: #d69aaa;
+  --rgb-primary: 214 154 170;
+  --color-primary-hover: #e2afbd;
+  --rgb-primary-hover: 226 175 189;
+  --color-primary-dark: #e2afbd;
+  --rgb-primary-dark: 226 175 189;
+  --color-primary-light: #b87588;
+  --rgb-primary-light: 184 117 136;
+  --color-secondary: #c0a6c6;
+  --rgb-secondary: 192 166 198;
+  --color-surface-soft: #443139;
+  --rgb-surface-soft: 68 49 57;
+  --color-success: #adc0a6;
+  --rgb-success: 173 192 166;
+  --color-danger: #e7a1aa;
+  --rgb-danger: 231 161 170;
+  --color-warning: #dfbd82;
+  --rgb-warning: 223 189 130;
+  --color-background: #282123;
+  --rgb-background: 40 33 35;
+  --color-surface: #342b2e;
+  --rgb-surface: 52 43 46;
+  --color-border: #55454b;
+  --rgb-border: 85 69 75;
+  --color-text-primary: #f7eee7;
+  --rgb-text-primary: 247 238 231;
+  --color-text-secondary: #cbb6bd;
+  --rgb-text-secondary: 203 182 189;
+  --color-green-light: #303f33;
+  --rgb-green-light: 48 63 51;
+  --color-green-dark: #adc0a6;
+  --rgb-green-dark: 173 192 166;
+  --color-amber-light: #493d28;
+  --rgb-amber-light: 73 61 40;
+  --color-amber-dark: #dfbd82;
+  --rgb-amber-dark: 223 189 130;
+  --color-red-light: #4c2c33;
+  --rgb-red-light: 76 44 51;
+  --color-red-dark: #e7a1aa;
+  --rgb-red-dark: 231 161 170;
 }
 
 @layer base {
@@ -57,7 +127,7 @@
   }
 
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-body);
   }
 
   /* Dark mode transitions */
@@ -92,11 +162,11 @@
   .btn-primary {
     @apply py-3 px-6 rounded-xl font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none;
     background-color: var(--color-primary);
-    color: white;
+    color: var(--color-on-primary);
   }
   
   .btn-primary:hover:not(:disabled) {
-    opacity: 0.9;
+    background-color: var(--color-primary-hover);
   }
   
   .btn-outline {
@@ -137,34 +207,34 @@
   .app-nav { @apply sticky top-0 z-30 shrink-0 border-b; background: var(--color-background); border-color: var(--color-border); }
   .app-nav-inner { @apply relative mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8; }
   .app-brand { @apply inline-flex shrink-0 items-center gap-2.5 text-lg font-bold tracking-tight; color: var(--color-primary); }
-  .app-brand-mark { @apply flex h-9 w-9 items-center justify-center rounded-xl; background: var(--color-green-light); }
+  .app-brand-mark { @apply flex h-9 w-9 items-center justify-center rounded-xl; background: var(--color-surface-soft); }
   .app-menu-toggle { @apply inline-flex h-11 w-11 items-center justify-center rounded-xl border md:hidden; color: var(--color-primary); }
   .app-nav-links { @apply absolute inset-x-0 top-full hidden flex-col gap-1 border-b p-3 shadow-lg md:static md:flex md:flex-row md:gap-1 md:border-0 md:p-0 md:shadow-none; background: var(--color-background); }
   .app-nav-links.is-open { @apply flex; }
   .app-nav-link { @apply flex min-h-11 items-center gap-2.5 rounded-xl px-4 text-sm font-medium; color: var(--color-text-secondary); }
   .app-nav-link:hover { background: var(--color-surface); color: var(--color-primary); }
-  .app-nav-link[aria-current='page'] { background: var(--color-green-light); color: var(--color-primary); box-shadow: inset 0 -2px var(--color-primary); }
+  .app-nav-link[aria-current='page'] { background: var(--color-surface-soft); color: var(--color-primary); box-shadow: inset 0 -2px var(--color-primary); }
   .check-toolbar { @apply mb-4 flex items-center justify-between gap-3; }
   .check-tool { @apply inline-flex h-11 w-11 items-center justify-center rounded-xl border; background: var(--color-background); }
-  .check-tool:hover { background: var(--color-green-light); }
-  .check-card { box-shadow: 0 12px 36px -24px rgba(13, 110, 64, 0.3); }
+  .check-tool:hover { background: var(--color-surface-soft); }
+  .check-card { box-shadow: 0 12px 36px -24px rgb(var(--color-shadow) / 0.12); }
   /* Shared sign-in / registration shell; forms remain first in reading order. */
   .auth-layout {
     @apply h-[100dvh] min-h-0 overflow-hidden flex items-center justify-center sm:p-4 lg:p-6;
-    background: radial-gradient(ellipse at top left, var(--color-green-light), transparent 65%), var(--color-surface);
+    background: var(--color-surface);
   }
   .auth-layout.auth-signup,
   .auth-layout.auth-signin {
-    background-image: linear-gradient(rgba(6, 78, 59, 0.28), rgba(6, 78, 59, 0.42)), url('/images/signup.png');
+    background-image: url('/images/signup.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
   .auth-card {
-    @apply grid h-full max-h-[820px] w-full max-w-[1240px] min-h-0 min-w-0 overflow-hidden md:grid-cols-[48fr_52fr] sm:rounded-3xl sm:border sm:p-2;
+    @apply grid h-full max-h-[820px] w-full max-w-[1240px] min-h-0 min-w-0 overflow-hidden md:grid-cols-[48fr_52fr] sm:rounded-2xl sm:border sm:p-2;
     background: var(--color-background);
     border-color: var(--color-border);
-    box-shadow: 0 24px 80px -32px color-mix(in srgb, var(--color-primary) 25%, transparent);
+    box-shadow: 0 12px 40px -24px rgb(var(--color-shadow) / 0.2);
   }
   .auth-form-region { @apply flex min-h-0 min-w-0 flex-col px-5 py-5 sm:px-6 lg:px-10; }
   .auth-brand { @apply flex shrink-0 items-center gap-2.5 pb-4 text-lg font-semibold tracking-tight; }
@@ -173,8 +243,8 @@
   .auth-form-heading { @apply mb-5 text-center; }
 
   .auth-footer { @apply flex shrink-0 items-center gap-2 pt-4 text-xs; color: var(--color-text-secondary); }
-  .auth-visual { @apply relative hidden min-w-0 overflow-hidden rounded-2xl md:block; background: var(--color-green-light); }
-  .auth-visual-shade { @apply absolute inset-0; background: linear-gradient(180deg, transparent 35%, color-mix(in srgb, var(--color-primary) 35%, transparent) 60%, var(--color-green-light-dark) 100%); }
+  .auth-visual { @apply relative hidden min-w-0 overflow-hidden rounded-2xl md:block; background: var(--color-surface-soft); }
+  .auth-visual-shade { @apply absolute inset-0; background: rgb(var(--color-shadow) / 0.18); }
   .auth-visual-label { @apply absolute left-6 top-6 flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-xs text-white backdrop-blur-md; background: var(--color-primary); }
   .auth-visual-copy { @apply absolute inset-x-0 bottom-0 p-7 text-center text-white lg:p-10 lg:pb-12; }
   .app-shell-viewport { @apply h-[100dvh] min-h-0; }
@@ -205,3 +275,34 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Shared maternal wellness typography and control surfaces. */
+@layer base {
+  h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; letter-spacing: -0.025em; line-height: 1.25; }
+  input, select, textarea, button { font-family: var(--font-body); }
+  input:not([type="radio"]):not([type="checkbox"]):not([type="range"]), select, textarea {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+  }
+  input::placeholder, textarea::placeholder { color: var(--color-text-secondary); opacity: 0.8; }
+  input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color: var(--color-primary); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline-color: var(--color-secondary); }
+}
+@layer components {
+  .app-brand, .auth-brand { font-family: var(--font-heading); font-weight: 500; }
+  .app-nav { box-shadow: 0 2px 12px rgb(var(--color-shadow) / 0.04); }
+  .content-panel, .chat-panel { box-shadow: 0 4px 20px rgb(var(--color-shadow) / 0.04); }
+  .auth-visual-copy { background: rgb(var(--color-shadow) / 0.72); }
+  .theme-button { --tw-ring-color: var(--color-secondary); --tw-ring-offset-color: var(--color-background); }
+  .theme-button-primary { color: var(--color-on-primary) !important; }
+  .theme-button-primary:hover:not(:disabled) { background-color: var(--color-primary-hover) !important; }
+  .theme-button-outline:hover:not(:disabled) { background-color: var(--color-surface-soft) !important; }
+}
+/* Preserve contrast for foregrounds on accent surfaces in both themes. */
+[class~="bg-primary"][class~="text-white"], .status-bar, .status-bar [class~="text-white"],
+.auth-brand-mark, .auth-visual-label { color: var(--color-on-primary); }
+[data-sonner-toast] { font-family: var(--font-body); background: var(--color-background) !important; color: var(--color-text-primary) !important; border-color: var(--color-border) !important; }
+
+[style*="background"][style*="var(--color-primary)"][class*="text-white"],
+[style*="background"][style*="var(--color-primary)"] [class*="text-white"] { color: var(--color-on-primary); }

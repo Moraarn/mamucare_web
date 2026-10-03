@@ -49,11 +49,6 @@ export default function CallUI({
   return (
     <AppShell
       contentWidth="reading"
-      statusBar={{
-        title: 'MamuCare AI',
-        rightContent: callDuration,
-        color: isAIResponding ? 'primary' : 'primary'
-      }}
     >
       <div className="flex flex-col h-full px-4 py-6 space-y-6">
         {/* AI Avatar Section */}
@@ -117,7 +112,7 @@ export default function CallUI({
                 style={{ 
                   height: `${height}%`,
                   opacity: height > 0 ? 1 : 0.3,
-                  backgroundColor: isAIResponding ? 'var(--color-primary)' : '#10b981'
+                  backgroundColor: isAIResponding ? 'var(--color-primary)' : 'var(--color-success)'
                 }}
               />
             )) : Array(20).fill(0).map((_, index) => (

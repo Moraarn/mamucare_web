@@ -18,7 +18,7 @@ export default function MicButton({ isRecording, onClick }: MicButtonProps) {
           : 'var(--color-primary)'
       }}
     >
-      <Mic size={16} className="text-white" />
+      <Mic size={16} className="text-[var(--color-on-primary)]" />
     </button>
   )
 }

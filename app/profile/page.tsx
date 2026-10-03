@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export default function ProfilePage() {
   return (
-    <AppShell statusBar={{ title: 'My Profile', showBack: true, rightContent: '', color: 'primary' }}>
+    <AppShell>
       <ProfileClient />
     </AppShell>
   )

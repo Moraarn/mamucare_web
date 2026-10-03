@@ -118,7 +118,7 @@ export default function ProfileClient() {
             style={{
               padding: '8px 16px',
               backgroundColor: 'var(--color-primary)',
-              color: 'white',
+              color: 'var(--color-on-primary)',
               border: 'none',
               borderRadius: '8px',
               fontSize: '0.85rem'
@@ -149,9 +149,9 @@ export default function ProfileClient() {
   }
 
   const riskStyle = (level: string) => {
-    if (level === 'high')   return { bg: 'var(--color-red-light)', color: 'var(--color-danger)', dot: '#EF4444' }
-    if (level === 'medium') return { bg: 'var(--color-amber-light)', color: 'var(--color-warning)', dot: '#F59E0B' }
-    return                         { bg: 'var(--color-green-light)', color: '#16A34A', dot: '#22C55E' }
+    if (level === 'high')   return { bg: 'var(--color-red-light)', color: 'var(--color-danger)', dot: 'var(--color-danger)' }
+    if (level === 'medium') return { bg: 'var(--color-amber-light)', color: 'var(--color-warning)', dot: 'var(--color-warning)' }
+    return                         { bg: 'var(--color-green-light)', color: 'var(--color-success)', dot: 'var(--color-success)' }
   }
 
   const lc = userProfile?.lastCheckResult ? riskStyle(userProfile.lastCheckResult.riskLevel) : null
