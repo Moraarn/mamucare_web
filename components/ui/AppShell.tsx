@@ -3,6 +3,7 @@
 import { ReactNode } from 'react'
 import StatusBar from './StatusBar'
 import BottomNav from './BottomNav'
+import MamuCareChat from '@/components/chat'
 
 interface AppShellProps {
   children: ReactNode
@@ -28,6 +29,7 @@ export default function AppShell({ children, statusBar, showBottomNav = true, co
           {children}
         </main>
       </div>
+      <MamuCareChat />
     </div>
   )
 }
