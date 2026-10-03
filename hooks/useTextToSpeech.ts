@@ -6,7 +6,7 @@ export interface UseTextToSpeechReturn {
   isSpeaking: boolean
   isSupported: boolean
   error: string | null
-  speak: (text: string) => void
+  speak: (text: string, onComplete?: () => void) => void
   stop: () => void
   pause: () => void
   resume: () => void
@@ -26,28 +26,27 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
       setIsSupported(true)
       synthesisRef.current = window.speechSynthesis
       
-      // Set up event listeners
-      const handleStart = () => setIsSpeaking(true)
-      const handleEnd = () => setIsSpeaking(false)
-      const handleError = (event: SpeechSynthesisErrorEvent) => {
-        console.error('Text-to-speech error:', event.error)
-        setError(event.error)
-        setIsSpeaking(false)
+      return () => {
+        if (speechRef.current) {
+          speechRef.current.onend = null
+          speechRef.current.onerror = null
+          speechRef.current.onstart = null
+        }
+        window.speechSynthesis.cancel()
       }
-      
-      synthesisRef.current.addEventListener('voiceschanged', () => {
-        // Voices are loaded
-      })
     } else {
       setIsSupported(false)
       setError('Text-to-speech is not supported in this browser')
     }
   }, [])
 
-  const speak = (text: string) => {
-    if (!synthesisRef.current || !text.trim()) return
+  const speak = (text: string, onComplete?: () => void) => {
+    if (!synthesisRef.current || !text.trim()) { onComplete?.(); return }
     
     // Cancel any ongoing speech
+    if (speechRef.current) {
+      speechRef.current.onstart = speechRef.current.onend = speechRef.current.onerror = null
+    }
     synthesisRef.current.cancel()
     
     // Create new utterance
@@ -75,20 +74,29 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
     
     utterance.onend = () => {
       setIsSpeaking(false)
+      onComplete?.()
     }
     
     utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
       console.error('Text-to-speech error:', event.error)
       setError(event.error)
       setIsSpeaking(false)
+      onComplete?.()
     }
     
     speechRef.current = utterance
-    synthesisRef.current.speak(utterance)
+    try { synthesisRef.current.speak(utterance) } catch {
+      setError('Unable to play audio. Please read the response.')
+      setIsSpeaking(false)
+      onComplete?.()
+    }
   }
 
   const stop = () => {
     if (synthesisRef.current) {
+      if (speechRef.current) {
+        speechRef.current.onstart = speechRef.current.onend = speechRef.current.onerror = null
+      }
       synthesisRef.current.cancel()
       setIsSpeaking(false)
     }

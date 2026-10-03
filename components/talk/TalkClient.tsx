@@ -70,10 +70,20 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
   const [isInCall, setIsInCall] = useState(false)
   const [callStartTime, setCallStartTime] = useState<Date | null>(null)
   const [isMuted, setIsMuted] = useState(false)
+  const mutedRef = useRef(false)
   const [isSpeakerOn, setIsSpeakerOn] = useState(true)
-  const [isAIResponding, setIsAIResponding] = useState(false)
+  const [callResponse, setCallResponse] = useState('')
+  const [voiceState, setVoiceState] = useState<'idle' | 'listening' | 'processing' | 'speaking'>('idle')
+  const voiceStateRef = useRef(voiceState)
+  const callSessionRef = useRef(0)
+  const callActiveRef = useRef(false)
+  const speakerRef = useRef(true)
+  const changeVoiceState = (state: typeof voiceState) => {
+    voiceStateRef.current = state
+    setVoiceState(state)
+  }
   const [callDuration, setCallDuration] = useState('00:00')
-  const [conversationTurn, setConversationTurn] = useState<'user' | 'ai'>('user')
+
   
   // Voice hooks
   const { 
@@ -90,7 +100,8 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
     isSpeaking: isAISpeaking, 
     speak: speakAI, 
     stop: stopAISpeaking,
-    isSupported: ttsSupported 
+    isSupported: ttsSupported,
+    error: ttsError 
   } = useTextToSpeech()
   
   const callIntervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -120,17 +131,17 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
     }
   }, [isInCall, callStartTime])
 
-  // Handle voice input during call
   useEffect(() => {
-    if (isInCall && conversationTurn === 'user' && userTranscript && !isAIResponding) {
-      // Check if user has finished speaking (simple heuristic)
-      const words = userTranscript.trim().split(' ')
-      if (words.length > 3 && userTranscript.endsWith(' ') || 
-          words.length > 10) {
-        handleUserSpeech(userTranscript.trim())
-      }
+    if (speechError && callActiveRef.current && voiceStateRef.current === 'listening') {
+      void stopUserListening()
+      changeVoiceState('idle')
     }
-  }, [userTranscript, isInCall, conversationTurn, isAIResponding])
+  }, [speechError, stopUserListening])
+
+  useEffect(() => () => {
+    callActiveRef.current = false
+    callSessionRef.current++
+  }, [])
 
   const getUserContext = () => {
     if (!currentUser) return userContext
@@ -219,166 +230,106 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
     }
   }, [isUserListening, userTranscript, isRecording, isInCall])
 
-  const handleUserSpeech = async (userSpeech: string) => {
-    if (!userSpeech.trim()) return
-    
-    // Stop listening
-    stopUserListening()
-    
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: userSpeech,
-      isUser: true,
+  const playCallResponse = (text: string, session: number) => {
+    if (!callActiveRef.current || session !== callSessionRef.current) return
+    setCallResponse(text)
+    if (!speakerRef.current || !ttsSupported) { resetUserTranscript(); changeVoiceState('idle'); return }
+    changeVoiceState('speaking')
+    speakAI(text, () => {
+      if (callActiveRef.current && session === callSessionRef.current) { resetUserTranscript(); changeVoiceState('idle') }
+    })
+  }
+
+  const finishUserTurn = async () => {
+    // Synchronous guard blocks repeated clicks before React renders.
+    if (!callActiveRef.current || voiceStateRef.current !== 'listening') return
+    const session = callSessionRef.current
+    changeVoiceState('processing')
+    const userSpeech = (await stopUserListening()).trim()
+    if (!callActiveRef.current || session !== callSessionRef.current) return
+    if (!userSpeech) { changeVoiceState('idle'); return }
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(), text: userSpeech, isUser: true,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
-    setMessages(prev => [...prev, userMessage])
-    
-    // Reset transcript for next turn
-    resetUserTranscript()
-    
-    // Get AI response
-    setConversationTurn('ai')
-    setIsAIResponding(true)
-    
+    }])
     try {
-      // Use conversation state machine for voice calls
-      const conversationResponse: ConversationResponse = await handleCallConversation({
-        userId: currentUser?.id || 'anonymous',
-        message: userSpeech,
-        userContext: getUserContext()
+      const response: ConversationResponse = await handleCallConversation({
+        userId: currentUser?.id || 'anonymous', message: userSpeech, userContext: getUserContext()
       })
-
-      // Add AI message with conversation context
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: conversationResponse.message,
-        isUser: false,
+      if (!callActiveRef.current || session !== callSessionRef.current) return
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(), text: response.message, isUser: false,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
-      setMessages(prev => [...prev, aiMessage])
-
-      // Log risk level for monitoring
-      if (conversationResponse.riskLevel === 'high' || conversationResponse.isEmergency) {
-        console.warn(`High risk conversation detected: ${conversationResponse.riskLevel}`, {
-          userId: currentUser?.id,
-          state: conversationResponse.state,
-          message: userSpeech
-        });
-      }
-      
-      // Speak AI response
-      if (isSpeakerOn) {
-        speakAI(conversationResponse.message)
-      }
-      
-      // Wait for speech to finish, then allow user to speak again
-      const speechDuration = Math.max(2000, conversationResponse.message.length * 50) // Estimate speech duration
-      setTimeout(() => {
-        setIsAIResponding(false)
-        setConversationTurn('user')
-        if (!isMuted && isInCall) {
-          startUserListening()
-        }
-      }, isSpeakerOn ? speechDuration : 1000)
-      
+      }])
+      playCallResponse(response.message, session)
     } catch (error) {
+      if (!callActiveRef.current || session !== callSessionRef.current) return
       console.error('Error getting AI response:', error)
-      
-      // Fallback response
-      const fallbackResponse = t.fallback
-      
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: fallbackResponse,
-        isUser: false,
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(), text: t.fallback, isUser: false,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
-      setMessages(prev => [...prev, aiMessage])
-      
-      if (isSpeakerOn) {
-        speakAI(fallbackResponse)
-      }
-      
-      setTimeout(() => {
-        setIsAIResponding(false)
-        setConversationTurn('user')
-        if (!isMuted && isInCall) {
-          startUserListening()
-        }
-      }, isSpeakerOn ? 3000 : 1000)
+      }])
+      playCallResponse(t.fallback, session)
     }
   }
 
-  const startCall = () => {
+  const startUserTurn = () => {
+    if (!callActiveRef.current || voiceStateRef.current !== 'idle' || isMuted || isAISpeaking) return
+    resetUserTranscript()
+    if (startUserListening(true)) changeVoiceState('listening')
+  }
+
+  const startCall = async () => {
+    if (callActiveRef.current) return
+    callActiveRef.current = true
+    const session = ++callSessionRef.current
+    setIsRecording(false)
+    await stopUserListening()
+    if (!callActiveRef.current || session !== callSessionRef.current) return
+    stopAISpeaking()
+    speakerRef.current = true
+    setCallResponse('')
     setIsInCall(true)
     setCallStartTime(new Date())
+    mutedRef.current = false
     setIsMuted(false)
     setIsSpeakerOn(true)
-    setIsAIResponding(false)
-    setConversationTurn('user')
+    changeVoiceState('idle')
     resetUserTranscript()
-    
-    // Start with AI greeting
-    setTimeout(() => {
-      handleAIGreeting()
-    }, 1000)
-  }
-
-  const handleAIGreeting = async () => {
-    setConversationTurn('ai')
-    setIsAIResponding(true)
-    
-    const greeting = t.greeting
-    
-    // Add greeting to messages
-    const greetingMessage: Message = {
-      id: Date.now().toString(),
-      text: greeting,
-      isUser: false,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
-    setMessages(prev => [...prev, greetingMessage])
-    
-    // Speak the greeting
-    if (isSpeakerOn) {
-      speakAI(greeting)
-    }
-    
-    // Wait for speech to finish, then allow user to speak
-    setTimeout(() => {
-      setIsAIResponding(false)
-      setConversationTurn('user')
-      if (!isMuted) {
-        startUserListening()
-      }
-    }, isSpeakerOn ? 4000 : 2000)
   }
 
   const endCall = () => {
-    stopUserListening()
+    callActiveRef.current = false
+    callSessionRef.current++
+    void stopUserListening()
     stopAISpeaking()
     setIsInCall(false)
     setCallStartTime(null)
+    mutedRef.current = false
     setIsMuted(false)
     setIsSpeakerOn(true)
-    setIsAIResponding(false)
-    setConversationTurn('user')
+    changeVoiceState('idle')
   }
 
-  const toggleMute = () => {
-    const newMutedState = !isMuted
-    setIsMuted(newMutedState)
-    
-    if (newMutedState) {
-      stopUserListening()
-    } else if (isInCall && conversationTurn === 'user' && !isAIResponding) {
-      startUserListening()
+  const toggleMute = async () => {
+    const muted = !mutedRef.current
+    mutedRef.current = muted
+    setIsMuted(muted)
+    if (muted) void stopUserListening()
+    else {
+      const session = callSessionRef.current
+      await stopUserListening()
+      if (callActiveRef.current && session === callSessionRef.current && !mutedRef.current && voiceStateRef.current === 'listening') startUserListening(true)
     }
   }
 
   const toggleSpeaker = () => {
-    setIsSpeakerOn(!isSpeakerOn)
+    speakerRef.current = !speakerRef.current
+    setIsSpeakerOn(speakerRef.current)
+    if (!speakerRef.current) {
+      stopAISpeaking()
+      if (voiceStateRef.current === 'speaking') { resetUserTranscript(); changeVoiceState('idle') }
+    }
   }
 
   if (isInCall) {
@@ -389,12 +340,16 @@ export default function TalkClient({ initialMessages, userContext, user }: TalkC
         onToggleMute={toggleMute}
         isSpeakerOn={isSpeakerOn}
         onToggleSpeaker={toggleSpeaker}
-        isAIResponding={isAIResponding}
+        voiceState={voiceState}
+        onStartSpeaking={startUserTurn}
+        onDoneSpeaking={finishUserTurn}
+        speechSupported={speechSupported}
         callDuration={callDuration}
         isUserListening={isUserListening}
         userTranscript={userTranscript}
-        speechError={speechError}
-        conversationTurn={conversationTurn}
+        aiResponse={callResponse}
+        speechError={speechError || ttsError}
+
       />
     )
   }

@@ -53,8 +53,8 @@ export async function getApiConfig(): Promise<{ url: string; headers: Record<str
 
 export async function getAIResponse(request: TalkRequest): Promise<string> {
   try {
-    // Import the server-side OpenAI action
-    const { generateAIResponse } = await import('./openaiAction')
+    // Import the server-side Gemini action
+    const { generateAIResponse } = await import('@/server/gemini')
     
     // Detect language from the message
     const language = request.message.toLowerCase().includes('sasa') || 
@@ -77,7 +77,7 @@ export async function getAIResponse(request: TalkRequest): Promise<string> {
     
     const symptomDetected = symptomKeywords.some(keyword => request.message.toLowerCase().includes(keyword))
     
-    // Generate natural response using server-side OpenAI
+    // Generate natural response using server-side Gemini
     const response = await generateAIResponse({
       state: symptomDetected ? 'collecting_symptoms' : 'general',
       userMessage: request.message,
@@ -95,8 +95,8 @@ export async function getAIResponse(request: TalkRequest): Promise<string> {
 
 export async function handleCallConversation(request: CallRequest): Promise<ConversationResponse> {
   try {
-    // Import the server-side OpenAI action
-    const { generateAIResponse } = await import('./openaiAction')
+    // Import the server-side Gemini action
+    const { generateAIResponse } = await import('@/server/gemini')
     
     // Detect language from the message
     const language = request.message.toLowerCase().includes('sasa') || 
@@ -120,7 +120,7 @@ export async function handleCallConversation(request: CallRequest): Promise<Conv
     
     const symptomDetected = symptomKeywords.some(keyword => request.message.toLowerCase().includes(keyword))
     
-    // Generate natural response using server-side OpenAI
+    // Generate natural response using server-side Gemini
     const response = await generateAIResponse({
       state: symptomDetected ? 'collecting_symptoms' : 'general',
       userMessage: request.message,

@@ -19,14 +19,14 @@ A Next.js 14 web application that provides maternal health risk checking with AI
 - **State Management**: Zustand with localStorage persistence
 - **API Client**: Axios
 - **Voice Input**: Web Speech API
-- **AI Integration**: Anthropic Claude API
+- **AI Integration**: Google Gemini API via @google/genai (server-side)
 - **Icons**: Lucide React
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 20+ 
 - npm or yarn
 
 ### Installation
@@ -38,13 +38,13 @@ npm install
 
 2. Set up environment variables:
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Edit `.env.local` and add:
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3000
-ANTHROPIC_API_KEY=your-anthropic-api-key-here
+GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 3. Run the development server:
@@ -57,7 +57,7 @@ npm run dev
 ## Environment Variables
 
 - `NEXT_PUBLIC_API_URL`: The base URL for API calls
-- `ANTHROPIC_API_KEY`: Your Anthropic API key for the AI chat feature
+- `GEMINI_API_KEY`: Server-only Gemini API key for AI chat (gemini-3.8-flash). Never use a NEXT_PUBLIC prefix.
 
 ## Project Structure
 
@@ -203,3 +203,5 @@ For support or questions, please contact the development team.
 ---
 
 **Note**: This is a demonstration application. For production use, ensure proper security measures, HIPAA compliance, and medical professional oversight.
+
+`GEMINI_MODEL` optionally selects a model on the server. The default is `gemini-3.8-flash`; use `gemini-2.5-flash` only if your API key still has access. Restart servers after changing environment files.

@@ -1,4 +1,5 @@
-'use server'
+import 'server-only'
+import { GoogleGenAI } from '@google/genai'
 
 interface ConversationContext {
   state: string
@@ -9,81 +10,42 @@ interface ConversationContext {
   previousMessages?: string[]
 }
 
-interface OpenAIResponse {
+interface AIResponse {
   message: string
   language: 'en' | 'sw'
 }
 
-export async function generateAIResponse(context: ConversationContext): Promise<OpenAIResponse> {
-  const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY
-  
-  if (!apiKey) {
-    console.error('OpenAI API key is missing on server side')
-    throw new Error('OpenAI API key is required')
-  }
-
+export async function generateAIResponse(context: ConversationContext): Promise<AIResponse> {
+  const apiKey = process.env.GEMINI_API_KEY
+  if (!apiKey) throw new Error('AI service is not configured')
   try {
-    const systemPrompt = getSystemPrompt(context)
-    const userPrompt = getUserPrompt(context)
-
-    console.log('Server-side OpenAI Request:', {
-      state: context.state,
-      language: context.language,
-      userMessage: context.userMessage,
-      hasApiKey: !!apiKey
-    })
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: systemPrompt
-          },
-          {
-            role: 'user',
-            content: userPrompt
-          }
-        ],
-        max_tokens: 150,
+    const ai = new GoogleGenAI({ apiKey })
+    const response = await ai.models.generateContent({
+      model: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
+      contents: getUserPrompt(context),
+      config: {
+        systemInstruction: getSystemPrompt(context),
+        // Allow room for reasoning tokens as well as the concise reply.
+        maxOutputTokens: 2048,
         temperature: 0.7,
-      }),
+        // Use the model's default: supported thinking settings vary by model.
+      },
     })
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('Server-side OpenAI API error:', response.status, errorText)
-      throw new Error(`OpenAI API error: ${response.status} - ${errorText}`)
-    }
-
-    const data = await response.json()
-    const aiMessage = data.choices[0]?.message?.content
-
-    if (!aiMessage) {
-      console.error('No message in server-side OpenAI response:', data)
-      throw new Error('No message received from OpenAI')
-    }
-
-    console.log('Server-side OpenAI Response:', aiMessage.substring(0, 100))
-
-    return {
-      message: aiMessage.trim(),
-      language: context.language
-    }
+    const message = response.text?.trim()
+    if (!message) throw new Error('Empty AI response')
+    return { message, language: context.language }
   } catch (error) {
-    console.error('Server-side OpenAI error:', error)
-    throw error
+    console.error('Gemini provider error:', error)
+    // Never return provider diagnostics or credentials to the browser.
+    throw new Error('Unable to get an AI response. Please try again.')
   }
 }
 
 function getSystemPrompt(context: ConversationContext): string {
-  const basePrompt = `You are a compassionate maternal health assistant for a mobile health app in East Africa. You speak both English and Swahili naturally.
+  const basePrompt = `You are a compassionate maternal health assistant for pregnant and postpartum mothers using a mobile health app in East Africa. You speak both English and Swahili naturally.
+
+Keep every response focused on the mother's own health and wellbeing during pregnancy and after childbirth: her symptoms, recovery, emotional wellbeing, nutrition, rest, and breast health, including breastfeeding concerns that affect her.
+Do not introduce baby or infant care, ask about the baby's wellbeing, or offer support for "your little one" or "mtoto wako" in greetings. If asked about a baby's health or care, briefly explain that your focus is the mother's health and suggest a qualified child healthcare professional for the baby's concern. Then gently ask about the mother's own needs. Apply this scope in both English and Swahili, even when earlier conversation messages mention babies.
 
 Your role is to:
 1. Be empathetic and caring
