@@ -36,15 +36,15 @@ export default function StatusBar({
         <button 
           onClick={() => router.back()}
           aria-label="Go back"
-          className="text-white hover:opacity-80 transition-opacity"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors"
         >
           <ChevronLeft size={20} />
         </button>
       )}
       <div className="flex-1 text-left">
-        <h1 className="text-white font-medium">{title}</h1>
+        <h1 className="text-white font-semibold tracking-tight">{title}</h1>
       </div>
-      <div className="text-white text-sm shrink-0">
+      <div className="text-white text-sm font-medium shrink-0">
         {rightContent}
       </div>
     </div>

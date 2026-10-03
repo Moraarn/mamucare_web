@@ -16,7 +16,7 @@ export default function AuthClient() {
         <section className="auth-form-region" aria-labelledby="auth-title">
           <div className="auth-brand">
             <span className="auth-brand-mark"><Heart size={22} aria-hidden="true" /></span>
-            <span>CystaNiva</span>
+            <span>MamuCare</span>
           </div>
 
           <div className="auth-form-content">
@@ -25,7 +25,7 @@ export default function AuthClient() {
                 {isLogin ? 'Welcome back' : 'Create your account'}
               </h1>
               <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                {isLogin ? 'Sign in to continue your health journey.' : 'Start your maternal health journey with CystaNiva.'}
+                {isLogin ? 'Sign in to continue your health journey.' : 'Start your maternal health journey with MamuCare.'}
               </p>
             </header>
             {isLogin ? (

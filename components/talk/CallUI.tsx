@@ -50,11 +50,10 @@ export default function CallUI({
     <AppShell
       contentWidth="reading"
       statusBar={{
-        title: 'CystaNiva AI',
+        title: 'MamuCare AI',
         rightContent: callDuration,
         color: isAIResponding ? 'primary' : 'primary'
       }}
-      showBottomNav={false}
     >
       <div className="flex flex-col h-full px-4 py-6 space-y-6">
         {/* AI Avatar Section */}

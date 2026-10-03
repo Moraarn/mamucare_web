@@ -52,7 +52,7 @@ export default function ChatBubble({
               className="text-xs font-medium"
               style={{ color: 'var(--color-primary)' }}
             >
-              CystaNiva AI
+              MamuCare AI
             </span>
           </div>
         )}

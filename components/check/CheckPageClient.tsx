@@ -9,6 +9,7 @@ import QuestionProgress from './QuestionProgress'
 import QuestionCard from './QuestionCard'
 import AnswerButtons from './AnswerButtons'
 import VoiceInput from './VoiceInput'
+import { useVoiceAnswer } from '@/hooks/useVoiceAnswer'
 import ResultScreen from './ResultScreen'
 import Button from '@/components/ui/Button'
 import { fetchCurrentUser } from '@/lib/auth'
@@ -277,8 +278,7 @@ export default function CheckPageClient() {
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [riskResult, setRiskResult] = useState<CheckResult | null>(null)
-  const [isRecording, setIsRecording] = useState(false)
-  const [transcript, setTranscript] = useState('')
+  const voice = useVoiceAnswer(language, currentQuestionIndex, setSelectedAnswer)
 
   useEffect(() => {
     const initialize = async () => {
@@ -357,11 +357,13 @@ export default function CheckPageClient() {
   const currentQuestion = questions[currentQuestionIndex]
 
   const handleAnswerSelect = (answer: boolean) => {
+    voice.reset()
     setSelectedAnswer(answer)
   }
 
   const handleNext = async () => {
     if (selectedAnswer === null || !user) return
+    voice.reset()
 
     const answerToSave = selectedAnswer
 
@@ -419,17 +421,17 @@ export default function CheckPageClient() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
+      <AppShell contentWidth="reading" statusBar={{ title: 'Symptom check' }}>
+        <div className="content-panel py-12 text-center" role="status">Loading your questions...</div>
+      </AppShell>
     )
   }
 
   if (!user || questions.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Failed to load questions
-      </div>
+      <AppShell contentWidth="reading" statusBar={{ title: 'Symptom check' }}>
+        <div className="content-panel py-12 text-center" role="alert">Failed to load questions. Please refresh to try again.</div>
+      </AppShell>
     )
   }
 
@@ -446,23 +448,31 @@ export default function CheckPageClient() {
       }}
     >
       <div className="flex flex-col h-full">
-        <div className="flex justify-end gap-2 px-4 py-2">
+        <div className="check-toolbar">
+          <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+            {showResult ? 'Your checkup summary' : 'Check in on your health'}
+          </p>
+          <div className="flex shrink-0 gap-2">
           <button
-            onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-            className="p-2 rounded-full"
+            onClick={() => { voice.reset(); setLanguage(language === 'en' ? 'sw' : 'en') }}
+            className="check-tool"
             style={{ backgroundColor: 'var(--color-surface)' }}
             title="Switch language"
+            aria-label="Switch question language"
           >
             <Languages size={20} style={{ color: 'var(--color-text-primary)' }} />
           </button>
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full"
+            className="check-tool"
             style={{ backgroundColor: 'var(--color-surface)' }}
             title="Toggle theme"
+            aria-label="Toggle color theme"
           >
             <Palette size={20} style={{ color: 'var(--color-text-primary)' }} />
           </button>
+        </div>
+
         </div>
 
         <QuestionProgress
@@ -471,9 +481,9 @@ export default function CheckPageClient() {
           showResult={showResult}
         />
 
-        <div className="flex-1 px-4 py-4">
+        <div className="flex-1 py-5">
           {!showResult ? (
-            <div className="content-panel space-y-6">
+            <div className="content-panel check-card space-y-5 sm:space-y-6">
               <QuestionCard
                 question={currentQuestion}
                 questionNumber={currentQuestionIndex + 1}
@@ -488,9 +498,10 @@ export default function CheckPageClient() {
               />
 
               <VoiceInput
-                isRecording={isRecording}
-                transcript={transcript}
-                onVoiceInput={() => {}}
+                state={voice.state}
+                supported={voice.supported}
+                onVoiceInput={voice.start}
+                onCancel={voice.reset}
                 language={language}
               />
 

@@ -23,7 +23,7 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
 
   return (
     <div 
-      className="rounded-2xl p-4 space-y-3"
+      className="rounded-xl p-4 sm:p-5 space-y-3"
       style={{ backgroundColor: 'var(--color-surface)' }}
     >
       <div className="flex items-center gap-2">
@@ -39,7 +39,7 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
       </div>
       
       <h3 
-        className="text-lg font-semibold leading-tight"
+        className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight"
         style={{ color: 'var(--color-text-primary)' }}
       >
         {displayText}

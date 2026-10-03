@@ -19,8 +19,8 @@ export default function TalkPage() {
     {
       id: '1',
       text: language === 'sw'
-        ? "Habari! Mimi ni msaidizi wako wa afya wa CystaNiva. Niambie unajisikaje leo — unaweza kuongea au kuandika katika lugha yoyote."
-        : "Hello! I am the CystaNiva health assistant. Tell me how you are feeling today — you can speak or type in any language.",
+        ? "Habari! Mimi ni msaidizi wako wa afya wa MamuCare. Niambie unajisikaje leo — unaweza kuongea au kuandika katika lugha yoyote."
+        : "Hello! I am the MamuCare health assistant. Tell me how you are feeling today — you can speak or type in any language.",
       isUser: false,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }

@@ -74,7 +74,7 @@ export const useStore = create<AppState>()(
       },
     }),
     {
-      name: 'CystaNiva-store',
+      name: 'MamuCare-store',
       storage: typeof window !== 'undefined' 
         ? {
             getItem: (name) => {

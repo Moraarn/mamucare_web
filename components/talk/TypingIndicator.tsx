@@ -13,7 +13,7 @@ export default function TypingIndicator() {
             className="text-xs font-medium"
             style={{ color: 'var(--color-primary)' }}
           >
-            CystaNiva AI
+            MamuCare AI
           </span>
         </div>
         <div 

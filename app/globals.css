@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 
 /* CSS Variables for Theme */
 :root {
@@ -13,7 +13,10 @@
   --color-warning: #b45309;
   --color-background: #ffffff;
   --color-background-dark: hsl(102, 25%, 10%);
-  --color-surface: #f5f5f4;
+  --color-surface: #f4f8f5;
+  --color-green-dark: #0a4a2a;
+  --color-amber-dark: #92400e;
+  --color-red-dark: #7f1d1d;
   --color-surface-dark: #1f2937;
   --color-border: #e5e7eb;
   --color-border-dark: #374151;
@@ -127,17 +130,24 @@
 }
 
 @layer components {
-  .app-shell { @apply min-h-screen-dvh; background: var(--color-surface); }
-  .app-workspace { @apply min-w-0 flex flex-col min-h-screen-dvh; }
-  .app-shell-with-nav { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
+  .app-shell { @apply min-h-screen-dvh flex flex-col; background: var(--color-surface); }
+  .app-workspace { @apply min-w-0 flex flex-col flex-1; }
   .app-content { @apply w-full max-w-7xl mx-auto min-w-0 flex-1 p-4 sm:p-6 lg:p-8; }
   .app-content-reading { @apply max-w-3xl; }
-  .app-nav { @apply fixed bottom-0 inset-x-0 z-30 border-t; background: var(--color-background); border-color: var(--color-border); padding-bottom: env(safe-area-inset-bottom); }
-  .app-brand { @apply hidden items-center gap-3 font-bold text-xl; color: var(--color-primary); }
-  .app-nav-links { @apply flex justify-around; }
-  .app-nav-link { @apply flex min-h-[4.5rem] flex-1 flex-col items-center justify-center gap-1 px-2 text-xs; color: var(--color-text-secondary); }
-  .app-nav-link[aria-current='page'] { background: var(--color-green-light); color: var(--color-primary); }
-  .app-nav-link:hover { background: var(--color-surface); }
+  .app-nav { @apply sticky top-0 z-30 shrink-0 border-b; background: var(--color-background); border-color: var(--color-border); }
+  .app-nav-inner { @apply relative mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8; }
+  .app-brand { @apply inline-flex shrink-0 items-center gap-2.5 text-lg font-bold tracking-tight; color: var(--color-primary); }
+  .app-brand-mark { @apply flex h-9 w-9 items-center justify-center rounded-xl; background: var(--color-green-light); }
+  .app-menu-toggle { @apply inline-flex h-11 w-11 items-center justify-center rounded-xl border md:hidden; color: var(--color-primary); }
+  .app-nav-links { @apply absolute inset-x-0 top-full hidden flex-col gap-1 border-b p-3 shadow-lg md:static md:flex md:flex-row md:gap-1 md:border-0 md:p-0 md:shadow-none; background: var(--color-background); }
+  .app-nav-links.is-open { @apply flex; }
+  .app-nav-link { @apply flex min-h-11 items-center gap-2.5 rounded-xl px-4 text-sm font-medium; color: var(--color-text-secondary); }
+  .app-nav-link:hover { background: var(--color-surface); color: var(--color-primary); }
+  .app-nav-link[aria-current='page'] { background: var(--color-green-light); color: var(--color-primary); box-shadow: inset 0 -2px var(--color-primary); }
+  .check-toolbar { @apply mb-4 flex items-center justify-between gap-3; }
+  .check-tool { @apply inline-flex h-11 w-11 items-center justify-center rounded-xl border; background: var(--color-background); }
+  .check-tool:hover { background: var(--color-green-light); }
+  .check-card { box-shadow: 0 12px 36px -24px rgba(13, 110, 64, 0.3); }
   /* Shared sign-in / registration shell; forms remain first in reading order. */
   .auth-layout {
     @apply h-[100dvh] min-h-0 overflow-hidden flex items-center justify-center sm:p-4 lg:p-6;
@@ -168,25 +178,11 @@
   .auth-visual-label { @apply absolute left-6 top-6 flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-xs text-white backdrop-blur-md; background: var(--color-primary); }
   .auth-visual-copy { @apply absolute inset-x-0 bottom-0 p-7 text-center text-white lg:p-10 lg:pb-12; }
   .app-shell-viewport { @apply h-[100dvh] min-h-0; }
-  .app-shell-viewport .app-workspace { @apply h-full min-h-0; }
+  .app-shell-viewport .app-workspace { @apply flex-1 min-h-0; }
   .app-shell-viewport .app-content { @apply flex flex-col min-h-0; }
   .chat-panel { @apply flex flex-col flex-1 min-h-0 w-full max-w-4xl mx-auto border rounded-2xl overflow-hidden; background: var(--color-background); }
   .content-panel { @apply rounded-2xl border p-4 sm:p-6; background: var(--color-background); border-color: var(--color-border); }
-  @screen md {
-    .app-shell-with-nav { @apply pl-24 pb-0; }
-    .app-nav { @apply inset-y-0 left-0 right-auto w-24 border-t-0 border-r p-3; }
-    .app-brand { @apply flex justify-center py-6; }
-    .app-brand span { @apply hidden; }
-    .app-nav-links { @apply flex-col gap-2; }
-    .app-nav-link { @apply flex-none rounded-xl; }
-  }
-  @screen lg {
-    .app-shell-with-nav { @apply pl-60; }
-    .app-nav { @apply w-60 p-5; }
-    .app-brand { @apply justify-start; }
-    .app-brand span { @apply inline; }
-    .app-nav-link { @apply min-h-12 flex-row justify-start gap-3 px-4 text-sm; }
-  }
+
 }
 
 :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
@@ -204,4 +200,8 @@
   .auth-visual-copy h2 { font-size: 1.5rem; }
   .auth-visual-copy > p:first-child,
   .auth-visual-copy > div { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }

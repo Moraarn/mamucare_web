@@ -15,7 +15,12 @@ export default function QuestionProgress({
 
   return (
     <div 
-      className="h-1"
+      role="progressbar"
+      aria-label="Checkup progress"
+      aria-valuemin={0}
+      aria-valuemax={totalQuestions}
+      aria-valuenow={currentQuestionIndex + 1}
+      className="h-1.5 rounded-full overflow-hidden"
       style={{ backgroundColor: 'var(--color-border)' }}
     >
       <div 

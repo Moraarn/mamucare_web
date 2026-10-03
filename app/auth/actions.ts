@@ -8,8 +8,8 @@ export async function logout() {
   // Clear all auth cookies
   cookieStore.delete('access_token')
   cookieStore.delete('refresh_token')
-  cookieStore.delete('CystaNiva_token')
-  cookieStore.delete('nab_CystaNiva_token')
+  cookieStore.delete('MamuCare_token')
+  cookieStore.delete('nab_MamuCare_token')
 
   return { success: true }
 }

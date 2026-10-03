@@ -13,18 +13,18 @@ import { getApiConfig, getAIResponse, handleCallConversation, type Message, type
 
 const translations = {
   en: {
-    title: 'Talk to CystaNiva AI',
+    title: 'Talk to MamuCare AI',
     listening: 'Listening…',
     error: "Sorry, I'm having trouble connecting. Please try again or contact your health worker if you need immediate help.",
     fallback: "I'm having trouble connecting right now. Please try again or contact your health worker if you need immediate help.",
-    greeting: "Hello! I'm your CystaNiva health assistant. How are you feeling today? You can tell me about any symptoms or concerns you have."
+    greeting: "Hello! I'm your MamuCare health assistant. How are you feeling today? You can tell me about any symptoms or concerns you have."
   },
   sw: {
-    title: 'Zungumza na CystaNiva AI',
+    title: 'Zungumza na MamuCare AI',
     listening: 'Inasikiliza…',
     error: "Samahani, nina shida ya kuunganisha. Tena jaribu au wasiliana na mhudumu wa afya ikiwa unahitaji msaada wa haraka.",
     fallback: "Nina shida ya kuunganika sasa hivi. Tena jaribu au wasiliana na mhudumu wa afya ikiwa unahitaki msaada wa haraka.",
-    greeting: "Habari! Mimi ni msaidizi wako wa afya wa CystaNiva. Unajisikaje leo? Unaweza kuambia kuhusu dalili zozote au wasiwasi ulio nazo."
+    greeting: "Habari! Mimi ni msaidizi wako wa afya wa MamuCare. Unajisikaje leo? Unaweza kuambia kuhusu dalili zozote au wasiwasi ulio nazo."
   }
 }
 

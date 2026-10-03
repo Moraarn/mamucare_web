@@ -25,6 +25,7 @@ export default function AnswerButtons({
   return (
     <div className="space-y-3">
       <button
+        aria-pressed={selectedAnswer === true}
         onClick={() => onAnswerSelect(true)}
         className={`w-full p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${
           selectedAnswer === true
@@ -67,6 +68,7 @@ export default function AnswerButtons({
       </button>
 
       <button
+        aria-pressed={selectedAnswer === false}
         onClick={() => onAnswerSelect(false)}
         className={`w-full p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${
           selectedAnswer === false

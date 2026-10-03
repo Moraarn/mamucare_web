@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "CystaNiva - Maternal Health Risk Checker",
+  title: "MamuCare - Maternal Health Risk Checker",
   description: "A maternal health risk checker app for pregnant and postpartum women",
 };
 

@@ -1,4 +1,4 @@
-# CystaNiva - Maternal Health Risk Checker
+# MamuCare - Maternal Health Risk Checker
 
 A Next.js 14 web application that provides maternal health risk checking with AI-powered chat support. The app mimics a mobile experience in a browser with a clean, minimal interface.
 
@@ -7,7 +7,7 @@ A Next.js 14 web application that provides maternal health risk checking with AI
 - **Authentication**: Login and 3-step signup process
 - **Health Dashboard**: Personalized dashboard with risk badges and quick actions
 - **Symptom Checker**: Question-based risk assessment with real-time results
-- **AI Chat**: Voice and text chat with CystaNiva AI for health guidance
+- **AI Chat**: Voice and text chat with MamuCare AI for health guidance
 - **Mobile-First Design**: 390px centered container that looks like a mobile app
 - **Offline Support**: Local storage for user data and checkup history
 

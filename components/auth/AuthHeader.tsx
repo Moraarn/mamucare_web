@@ -29,7 +29,7 @@ export default function AuthHeader({ onSignIn, onCreateAccount, activeTab = 'sig
           className="text-2xl font-bold mb-1 tracking-tight"
           style={{ color: '#1f2937' }}
         >
-          CystaNiva
+          MamuCare
         </h1>
         
         {/* Subtitle */}
