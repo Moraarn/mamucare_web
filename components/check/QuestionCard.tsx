@@ -17,38 +17,16 @@ interface QuestionCardProps {
   language?: 'en' | 'sw'
 }
 
-export default function QuestionCard({ question, questionNumber, totalQuestions, language = 'en' }: QuestionCardProps) {
+export default function QuestionCard({ question, language = 'en' }: QuestionCardProps) {
   const displayText = language === 'sw' && question.text_sw ? question.text_sw : question.text
   const displayHint = language === 'sw' && question.hint_sw ? question.hint_sw : question.hint
 
   return (
-    <div 
-      className="rounded-xl p-4 sm:p-5 space-y-3"
-      style={{ backgroundColor: 'var(--color-surface)' }}
-    >
-      <div className="flex items-center gap-2">
-        <span 
-          className="text-xs uppercase font-medium px-2 py-1 rounded"
-          style={{
-            color: 'var(--color-primary)',
-            backgroundColor: 'var(--color-green-light)'
-          }}
-        >
-          {question.tag}
-        </span>
-      </div>
-      
-      <h3 
-        className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight"
-        style={{ color: 'var(--color-text-primary)' }}
-      >
+    <div className="space-y-5 text-center">
+      <h1 id="check-question-text" className="text-3xl font-normal leading-snug tracking-tight text-text-primary sm:text-4xl">
         {displayText}
-      </h3>
-      
-      <p 
-        className="text-sm leading-relaxed"
-        style={{ color: 'var(--color-text-secondary)' }}
-      >
+      </h1>
+      <p id="check-question-hint" className="mx-auto max-w-lg text-base leading-relaxed text-text-secondary">
         {displayHint}
       </p>
     </div>

@@ -14,22 +14,15 @@ export default function QuestionProgress({
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100
 
   return (
-    <div 
-      role="progressbar"
-      aria-label="Checkup progress"
-      aria-valuemin={0}
-      aria-valuemax={totalQuestions}
-      aria-valuenow={currentQuestionIndex + 1}
-      className="h-1.5 rounded-full overflow-hidden"
-      style={{ backgroundColor: 'var(--color-border)' }}
-    >
-      <div 
-        className="h-full transition-all duration-300 ease-out"
-        style={{ 
-          width: `${progress}%`,
-          backgroundColor: 'var(--color-primary)'
-        }}
-      />
+    <div className="space-y-3">
+      <p className="text-center text-sm font-medium text-text-secondary" aria-live="polite" aria-atomic="true">
+        Question {currentQuestionIndex + 1} of {totalQuestions}
+      </p>
+      <div role="progressbar" aria-label="Checkup progress" aria-valuemin={0}
+        aria-valuemax={totalQuestions} aria-valuenow={currentQuestionIndex + 1}
+        className="h-1 overflow-hidden rounded-full bg-border">
+        <div className="h-full bg-primary transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
+      </div>
     </div>
   )
 }

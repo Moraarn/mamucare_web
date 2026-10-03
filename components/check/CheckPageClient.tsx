@@ -8,7 +8,6 @@ import AppShell from '@/components/ui/AppShell'
 import QuestionProgress from './QuestionProgress'
 import QuestionCard from './QuestionCard'
 import AnswerButtons from './AnswerButtons'
-import VoiceInput from './VoiceInput'
 import { useVoiceAnswer } from '@/hooks/useVoiceAnswer'
 import ResultScreen from './ResultScreen'
 import Button from '@/components/ui/Button'
@@ -439,11 +438,9 @@ export default function CheckPageClient() {
     <AppShell
       contentWidth={showResult ? 'wide' : 'reading'}
     >
-      <div className="flex flex-col h-full">
-        <div className="check-toolbar">
-          <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-            {showResult ? 'Your checkup summary' : 'Check in on your health'}
-          </p>
+      <div className={`mx-auto flex h-full w-full flex-col ${showResult ? '' : 'max-w-[640px] pb-8 sm:pt-2'}`}>
+        <div className="mb-6 flex items-center justify-end gap-3">
+          {showResult && <p className="mr-auto text-sm font-medium text-text-secondary">Your checkup summary</p>}
           <div className="flex shrink-0 gap-2">
           <button
             onClick={() => { voice.reset(); setLanguage(language === 'en' ? 'sw' : 'en') }}
@@ -475,7 +472,7 @@ export default function CheckPageClient() {
 
         <div className="flex-1 py-5">
           {!showResult ? (
-            <div className="content-panel check-card space-y-5 sm:space-y-6">
+            <div className="space-y-8 pt-5 sm:space-y-10 sm:pt-9">
               <QuestionCard
                 question={currentQuestion}
                 questionNumber={currentQuestionIndex + 1}
@@ -486,14 +483,6 @@ export default function CheckPageClient() {
               <AnswerButtons
                 selectedAnswer={selectedAnswer}
                 onAnswerSelect={handleAnswerSelect}
-                language={language}
-              />
-
-              <VoiceInput
-                state={voice.state}
-                supported={voice.supported}
-                onVoiceInput={voice.start}
-                onCancel={voice.reset}
                 language={language}
               />
 

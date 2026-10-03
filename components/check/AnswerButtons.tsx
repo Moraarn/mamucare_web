@@ -1,3 +1,6 @@
+import { useId } from 'react'
+import { Check } from 'lucide-react'
+
 interface AnswerButtonsProps {
   selectedAnswer: boolean | null
   onAnswerSelect: (answer: boolean) => void
@@ -5,110 +8,29 @@ interface AnswerButtonsProps {
 }
 
 const translations = {
-  en: {
-    yes: 'Yes',
-    no: 'No'
-  },
-  sw: {
-    yes: 'Ndiyo',
-    no: 'Hapana'
-  }
+  en: { yes: 'Yes', no: 'No', answer: 'Choose your answer' },
+  sw: { yes: 'Ndiyo', no: 'Hapana', answer: 'Chagua jibu lako' },
 }
 
-export default function AnswerButtons({
-  selectedAnswer,
-  onAnswerSelect,
-  language = 'en'
-}: AnswerButtonsProps) {
+export default function AnswerButtons({ selectedAnswer, onAnswerSelect, language = 'en' }: AnswerButtonsProps) {
+  const name = useId()
   const t = translations[language]
 
   return (
-    <div className="space-y-3">
-      <button
-        aria-pressed={selectedAnswer === true}
-        onClick={() => onAnswerSelect(true)}
-        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${
-          selectedAnswer === true
-            ? 'border-primary'
-            : 'border-border hover:border-opacity-70'
-        }`}
-        style={{
-          backgroundColor: selectedAnswer === true
-            ? 'var(--color-surface-soft)'
-            : 'var(--color-background)'
-        }}
-      >
-        <div
-          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-            selectedAnswer === true ? 'border-primary' : ''
-          }`}
-          style={{
-            borderColor: selectedAnswer === true
-              ? 'var(--color-primary)'
-              : 'var(--color-border)',
-            backgroundColor: selectedAnswer === true
-              ? 'var(--color-primary)'
-              : 'transparent'
-          }}
-        >
-          {selectedAnswer === true && (
-            <div className="w-2 h-2 bg-white rounded-full" />
-          )}
-        </div>
-        <span
-          className="font-medium"
-          style={{
-            color: selectedAnswer === true
-              ? 'var(--color-primary)'
-              : 'var(--color-text-primary)'
-          }}
-        >
-          {t.yes}
-        </span>
-      </button>
-
-      <button
-        aria-pressed={selectedAnswer === false}
-        onClick={() => onAnswerSelect(false)}
-        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${
-          selectedAnswer === false
-            ? 'border-primary'
-            : 'border-border hover:border-opacity-70'
-        }`}
-        style={{
-          backgroundColor: selectedAnswer === false
-            ? 'var(--color-surface-soft)'
-            : 'var(--color-background)'
-        }}
-      >
-        <div
-          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-            selectedAnswer === false ? 'border-primary' : ''
-          }`}
-          style={{
-            borderColor: selectedAnswer === false
-              ? 'var(--color-primary)'
-              : 'var(--color-border)',
-            backgroundColor: selectedAnswer === false
-              ? 'var(--color-primary)'
-              : 'transparent'
-          }}
-        >
-          {selectedAnswer === false && (
-            <div className="w-2 h-2 bg-white rounded-full" />
-          )}
-        </div>
-        <span
-          className="font-medium"
-          style={{
-            color: selectedAnswer === false
-              ? 'var(--color-primary)'
-              : 'var(--color-text-primary)'
-          }}
-        >
-          {t.no}
-        </span>
-      </button>
-    </div>
+    <fieldset aria-describedby="check-question-text check-question-hint">
+      <legend className="sr-only">{t.answer}</legend>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {[{ value: true, label: t.yes }, { value: false, label: t.no }].map(({ value, label }) => (
+          <label key={String(value)} className="relative block cursor-pointer">
+            <input type="radio" name={name} value={String(value)} checked={selectedAnswer === value}
+              onChange={() => onAnswerSelect(value)} className="peer sr-only" />
+            <span className="flex min-h-24 items-center justify-center gap-3 rounded-xl border-2 border-border bg-background px-6 py-5 text-xl font-medium text-text-primary transition-colors hover:border-primary peer-checked:border-primary peer-checked:bg-surface-soft peer-checked:text-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-primary sm:min-h-28">
+              <span>{label}</span>
+              <Check size={20} aria-hidden="true" className={selectedAnswer === value ? 'shrink-0' : 'invisible shrink-0'} />
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
   )
 }
