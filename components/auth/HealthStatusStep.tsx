@@ -27,12 +27,6 @@ const statusOptions = [
     label: 'Postpartum',
     subtitle: 'Birth was 6–12 weeks ago',
   },
-  {
-    value: 'unknown' as UserStatus,
-    emoji: '❓',
-    label: 'Not sure',
-    subtitle: "I'll check both",
-  },
 ]
 
 const trimesterOptions = [
