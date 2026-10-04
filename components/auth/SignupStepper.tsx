@@ -41,8 +41,6 @@ export default function SignupStepper({
     success: boolean;
     message?: string;
     user?: unknown;
-    requiresVerification?: boolean;
-    nextStep?: string;
   }> {
     try {
       const res = await fetch('/api/auth/register', {
@@ -66,8 +64,6 @@ export default function SignupStepper({
         success: true,
         message: data?.message,
         user: data?.user ?? null,
-        requiresVerification: data?.requiresVerification,
-        nextStep: data?.nextStep,
       };
     } catch (error) {
       return {
@@ -102,14 +98,8 @@ export default function SignupStepper({
       return
     }
 
-    if (!result.requiresVerification) {
-      setError('Unable to start phone verification. Please try again.')
-      setIsLoading(false)
-      setIsSubmitted(false)
-      return
-    }
-
-    router.push('/auth/verify')
+    router.replace('/home')
+    router.refresh()
   }
 
   const nextStep = () => {

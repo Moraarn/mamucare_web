@@ -36,10 +36,19 @@ export async function backendSignup(action: string, body: unknown) {
 
 export function signupError(status = 503, data?: VerificationResult | null) {
   const message = typeof data?.message === 'string' && status < 500
-    ? data.message : 'Verification is temporarily unavailable. Please try again shortly.'
+    ? data.message : 'Signup is temporarily unavailable. Please try again shortly.'
   return NextResponse.json({ success: false, message, retryAfter: data?.retryAfter }, {
     status, headers: { 'Cache-Control': 'no-store', ...(data?.retryAfter ? { 'Retry-After': String(data.retryAfter) } : {}) },
   })
+}
+
+export function authenticatedResponse(data: VerificationResult) {
+  if (!data.success || !data.accessToken || !data.refreshToken || !data.user) return signupError(502)
+  const res = NextResponse.json({ success: true, user: data.user }, { headers: { 'Cache-Control': 'no-store' } })
+  res.cookies.set(AUTH_COOKIE_NAME, data.accessToken, accessCookieOptions)
+  res.cookies.set(REFRESH_COOKIE_NAME, data.refreshToken, refreshCookieOptions)
+  res.cookies.set(SIGNUP_COOKIE, '', { ...challengeCookie, maxAge: 0 })
+  return res
 }
 
 export function pendingResponse(data: VerificationResult, setCookie = false) {

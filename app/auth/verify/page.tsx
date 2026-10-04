@@ -1,5 +1,5 @@
-import VerifyOtp from '@/components/auth/VerifyOtp'
+import { redirect } from 'next/navigation'
 
 export default function VerifyPhonePage() {
-  return <VerifyOtp />
+  redirect('/auth')
 }

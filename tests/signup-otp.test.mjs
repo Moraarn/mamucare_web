@@ -42,14 +42,19 @@ function req(action, body = {}) {
   return new Request(`https://app.example.test/api/auth/${action}`, { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://app.example.test' }, body: JSON.stringify(body) })
 }
 
-test('signup sets only an HttpOnly pending challenge cookie and hides backend secrets', async () => {
-  const f = fixture(); const res = await f.register.POST(req('register', { phone: '+254712345678' }))
-  assert.equal(res.status, 200); assert.equal(res.body.requiresVerification, true)
+test('signup issues HttpOnly auth cookies immediately and hides backend secrets', async () => {
+  const f = fixture(); f.setReply({ success: true, accessToken: 'access', refreshToken: 'refresh', user: { id: 'user-1' } })
+  const res = await f.register.POST(req('register', { phone: '+254712345678' }))
+  assert.equal(res.status, 200); assert.equal(res.body.requiresVerification, undefined)
   assert.equal(res.body.challengeId, undefined); assert.equal(res.body.accessToken, undefined)
-  assert.equal(res.setCookies.length, 1); assert.equal(res.setCookies[0][0], 'signup_challenge')
-  assert.equal(res.setCookies[0][2].httpOnly, true); assert.equal(res.setCookies[0][2].secure, true)
+  assert.equal(res.body.refreshToken, undefined)
+  assert.equal(res.setCookies.length, 3); assert.equal(res.setCookies[0][0], 'access_token')
+  assert.equal(res.setCookies[1][0], 'refresh_token')
+  assert.equal(res.setCookies[0][2].httpOnly, true)
+  assert.equal(res.setCookies[1][2].httpOnly, true)
+  assert.equal(res.setCookies[2][0], 'signup_challenge'); assert.equal(res.setCookies[2][2].maxAge, 0)
 })
-test('registration fails closed if an old backend returns immediate auth tokens', async () => {
+test('registration fails closed if the backend omits the user', async () => {
   const f = fixture(); f.setReply({ success: true, accessToken: 'secret', refreshToken: 'secret' })
   const res = await f.register.POST(req('register'))
   assert.equal(res.status, 502); assert.equal(res.setCookies.length, 0)
@@ -84,11 +89,10 @@ test('status and resend expose only masked details, with cooldown feedback', asy
   assert.equal(limited.status, 429); assert.equal(limited.body.retryAfter, 42); assert.equal(limited.headers['Retry-After'], '42')
   assert.equal(limited.setCookies.length, 0)
 })
-test('failed delivery keeps verification pending with friendly feedback', async () => {
+test('registration rejects an outdated backend still requiring verification', async () => {
   const f = fixture(); f.setReply({ requiresVerification: true, challengeId: id, deliveryFailed: true, resendAfter: 45 })
   const res = await f.register.POST(req('register'))
-  assert.equal(res.body.deliveryFailed, true); assert.match(res.body.message, /could not send/)
-  assert.equal(res.setCookies[0][0], 'signup_challenge')
+  assert.equal(res.status, 502); assert.equal(res.setCookies.length, 0)
 })
 test('rejects cross-origin verification requests', async () => {
   const f = fixture(); const request = new Request('https://app.example.test/api/auth/verify-otp', {
